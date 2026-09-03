@@ -65,13 +65,13 @@ export function HeroPinned() {
       tl.fromTo(
         ".hero-letter",
         { opacity: 0 },
-        { opacity: 1, duration: 0.25, stagger: 0.032 },
+        { opacity: 1, duration: 0.25, stagger: 0.03 },
         3.2
       ).fromTo(
         ".hero-letter",
         { opacity: 1 },
-        { opacity: 0, duration: 0.25, stagger: 0.032, immediateRender: false },
-        3.65
+        { opacity: 0, duration: 0.25, stagger: 0.03, immediateRender: false },
+        3.85
       );
 
       // Beat 3 (6.0–10): the resolve block assembles like the reference —
@@ -189,11 +189,17 @@ export function HeroPinned() {
           <span className="text-accent">.</span>
         </div>
 
-        <p
-          className={`hero-statement ${hiddenUnlessReduced} absolute bottom-[14vh] left-[4vw] z-[5] max-w-[92vw] text-[clamp(0.9rem,1.5vw,1.3rem)] font-medium tracking-wide md:whitespace-nowrap`}
+        {/* Same stage position as the resolve headline — they never coexist
+            (kicker clears before beat 3 starts). */}
+        <div
+          className={`${hiddenUnlessReduced} pointer-events-none absolute inset-0 z-[5] flex items-center`}
         >
-          {letters(hero.statement)}
-        </p>
+          <div className="section-shell">
+            <p className="hero-statement max-w-3xl text-[clamp(1.4rem,2.8vw,2.4rem)] font-semibold leading-[1.2] tracking-wide">
+              {letters(hero.statement)}
+            </p>
+          </div>
+        </div>
 
         <div className="absolute inset-0 z-[5] flex items-center">
           <div className="section-shell">
