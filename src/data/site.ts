@@ -16,4 +16,10 @@ export const site: SiteConfig = {
     { label: "Projects", href: "#projects" },
     { label: "Contact", href: "#contact" },
   ],
+  skills: [
+    { area: "Frontend", items: ["React", "TypeScript", "Next.js", "Tailwind CSS"] },
+    { area: "Backend", items: ["Node.js", "Spring Boot", "REST APIs"] },
+    { area: "Infrastructure", items: ["Docker", "SQL Server", "CI/CD"] },
+    { area: "AI", items: ["Agentic AI tooling", "LLM integration", "Claude API"] },
+  ],
 };

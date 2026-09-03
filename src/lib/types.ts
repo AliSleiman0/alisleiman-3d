@@ -25,4 +25,5 @@ export interface SiteConfig {
   location?: string;
   socials: ProjectLink[];
   nav: { label: string; href: string }[];
+  skills: { area: string; items: string[] }[];
 }
