@@ -50,4 +50,29 @@ public/models/            Real .glb assets go here when available
 ## Content conventions
 
 - Project case studies live in `src/data/projects.ts` as typed `Project` objects (`src/lib/types.ts`); sections render from data.
-- Site-wide info (name, nav, socials) lives in `src/data/site.ts`.
+- Site-wide info (name, nav, socials, skills) lives in `src/data/site.ts`.
+
+## Architecture map (who does what)
+
+- `components/ScrollManager.tsx` — owns ALL ScrollTriggers: full-page scrub → `scrollState.progress`; per-section triggers → active section id. Renders null.
+- `lib/scroll.ts` — the GSAP↔R3F bridge: mutable `scrollState` (per-frame, no React) + subscribable active section (`useSyncExternalStore` in Navbar).
+- `components/3d/Hero3D.tsx` — the only 3D component the page imports. `next/dynamic` `ssr:false`, quality gate, CSS-glow fallback, vignette overlay.
+- `components/3d/quality.ts` — `useQualityTier()`: `off` (no WebGL / reduced motion → CSS glow only) · `low` (coarse pointer / ≤4 cores → 400 particles, DPR ≤1.5, no post-processing) · `high` (1200 particles, DPR 2, Effects + Environment).
+- `components/3d/CameraRig.tsx` — keyframed camera path over `scrollState.progress` (hero → about drift-right → projects pull-back → contact push-in), smoothstep segments, exp damping, pointer parallax on top.
+- `components/3d/HeroModel.tsx` — distorted icosahedron; scroll-linked color lerp (indigo→steel→violet), spin-up + mid-page scale-down. Contains the documented `useGLTF` swap (`MODEL_PATH = "/models/hero.glb"`).
+- `components/3d/Effects.tsx` — Bloom + Vignette composer (high tier only).
+- `components/ui/ScrollProgressBar.tsx` — rAF loop reading `scrollState.progress`; no scroll listeners, no React state.
+
+## Current status (2026-09-03) & next session
+
+All 5 build stages are ✅ and committed; tsc/lint/build clean; page fully static (SSR has no canvas). Dev-verified in Chrome at desktop + 390px.
+
+**PO verdict: the 3D centerpiece is boring** — a well-lit distorted sphere with no identity. Agreed direction to explore next session (recommendation: options 1+3 combined, asset-free, must respect quality tiers):
+1. **Custom shader core** — replace `MeshDistortMaterial` with fresnel-edged holographic/wireframe-hybrid shader material.
+2. Structured particle morphs per section (sphere → network graph → dissolve → converge).
+3. **Accent satellites** — small octahedra/torus knots orbiting on tilted rings, one per project accent color; Projects section aligns them.
+4. Real `.glb` via the documented swap (endgame when a model exists).
+
+**Also pending (content/shipping):** real project copy in `src/data/projects.ts`, real GitHub/LinkedIn URLs in `src/data/site.ts`, Vercel deploy (CLI not installed yet — `npm i -g vercel`).
+
+**Known quirks:** browser Grammarly extension causes a harmless hydration warning on `<body>`; `create-next-app` couldn't scaffold in place (capital letters in dir name) so package name is `alisleiman-3d`.
