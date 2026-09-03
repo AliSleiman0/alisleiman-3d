@@ -18,9 +18,10 @@ export const site: SiteConfig = {
   ],
   // Placeholder copy — rewrite freely; the hero renders whatever is here.
   hero: {
-    lineBehind: "Deep Work",
-    lineFront: "Clean Code",
-    statement: "Building the future, line by line.",
+    lineBehind: "Big Ideas",
+    lineFront: "Real Value",
+    statement:
+      "I turn ambitious ideas into fast, reliable software your customers will love.",
     eyebrow: "Why clients work with me",
     headline: "Your product, built and shipped end to end.",
     checklist: [

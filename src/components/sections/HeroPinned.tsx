@@ -65,13 +65,13 @@ export function HeroPinned() {
       tl.fromTo(
         ".hero-letter",
         { opacity: 0 },
-        { opacity: 1, duration: 0.25, stagger: 0.055 },
-        3.4
+        { opacity: 1, duration: 0.25, stagger: 0.032 },
+        3.2
       ).fromTo(
         ".hero-letter",
         { opacity: 1 },
-        { opacity: 0, duration: 0.25, stagger: 0.055, immediateRender: false },
-        4.05
+        { opacity: 0, duration: 0.25, stagger: 0.032, immediateRender: false },
+        3.65
       );
 
       // Beat 3 (6.0–10): the resolve block assembles like the reference —
@@ -122,7 +122,7 @@ export function HeroPinned() {
   // resting state renders statically (beats hidden via `reduced`, resolve
   // block forced visible) — the same degrade path the 3D layer follows.
   const lineClass =
-    "pointer-events-none absolute whitespace-nowrap text-[clamp(2.4rem,8vw,7.5rem)] font-extrabold uppercase leading-[0.95] tracking-tight text-foreground";
+    "pointer-events-none absolute whitespace-nowrap text-[clamp(2rem,6.5vw,6rem)] font-extrabold uppercase leading-[0.95] tracking-tight text-foreground";
   const hiddenUnlessReduced = reduced ? "hidden" : "";
   const resolveItemClass = reduced ? "" : "opacity-0";
   const lineInitial = reduced ? "" : "scale-x-0";
@@ -159,7 +159,7 @@ export function HeroPinned() {
           src="/hero/photo.jpg"
           alt={`${site.name} working at a desk under warm lamp light`}
           fetchPriority="high"
-          className="absolute inset-0 z-[1] h-full w-full select-none object-cover object-[68%_40%]"
+          className="absolute inset-0 z-[1] h-full w-full select-none object-cover object-[68%_22%]"
         />
         {/* z-2: the occluded line — behind the subject */}
         <div
@@ -173,7 +173,7 @@ export function HeroPinned() {
           src="/hero/cutout.webp"
           alt=""
           aria-hidden
-          className="absolute inset-0 z-[3] h-full w-full select-none object-cover object-[68%_40%]"
+          className="absolute inset-0 z-[3] h-full w-full select-none object-cover object-[68%_22%]"
         />
         {/* z-4: legibility scrim */}
         <div
@@ -189,19 +189,18 @@ export function HeroPinned() {
           <span className="text-accent">.</span>
         </div>
 
-        <p
-          className={`hero-statement ${hiddenUnlessReduced} absolute inset-x-0 top-[14vh] z-[5] whitespace-nowrap text-center text-[clamp(0.85rem,2.4vw,1.8rem)] font-medium tracking-wide`}
-        >
-          {letters(hero.statement)}
-        </p>
-
         <div className="absolute inset-0 z-[5] flex items-center">
           <div className="section-shell">
             <div className="max-w-2xl">
+              <p
+                className={`hero-statement ${hiddenUnlessReduced} mb-6 text-[clamp(0.9rem,1.5vw,1.3rem)] font-medium tracking-wide sm:mb-8 md:whitespace-nowrap`}
+              >
+                {letters(hero.statement)}
+              </p>
               <p className="hero-eyebrow mb-4 font-mono text-sm tracking-widest text-accent">
                 {words(hero.eyebrow.toUpperCase())}
               </p>
-              <h1 className="hero-headline text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
+              <h1 className="hero-headline text-4xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
                 {words(hero.headline)}
               </h1>
               <div
@@ -211,7 +210,7 @@ export function HeroPinned() {
               <ul className="mt-2">
                 {hero.checklist.map((item) => (
                   <li key={item} className="hero-check">
-                    <div className="flex items-baseline gap-4 py-6 text-lg text-foreground sm:text-xl">
+                    <div className="flex items-baseline gap-4 py-4 text-lg text-foreground sm:py-6 sm:text-xl">
                       <span
                         className={`hero-word ${resolveItemClass} text-accent`}
                         aria-hidden
