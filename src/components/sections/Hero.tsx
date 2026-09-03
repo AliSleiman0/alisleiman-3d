@@ -8,12 +8,6 @@ export function Hero() {
       id="hero"
       className="relative flex min-h-svh items-center overflow-hidden"
     >
-      {/* Placeholder glow marking where the 3D model will render (stage 3 swaps this layer for the Canvas). */}
-      <div
-        aria-hidden
-        className="glow pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2"
-      />
-
       <div className="section-shell py-24">
         <Reveal>
           <p className="mb-4 font-mono text-sm tracking-widest text-accent">

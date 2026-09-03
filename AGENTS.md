@@ -19,8 +19,8 @@ Next.js (App Router) + TypeScript · Tailwind CSS · React Three Fiber + @react-
 ## Build stages (confirm each works before the next)
 
 1. ✅ Scaffold + folder structure + typed placeholder data
-2. Static 2D layout (hero, about, projects grid, contact) — deployable fallback on its own, no 3D
-3. Single `<Canvas>` with primitive-built `<HeroModel />`, lazy-loaded via `next/dynamic` `ssr: false`
+2. ✅ Static 2D layout (hero, about, projects grid, contact) — deployable fallback on its own, no 3D
+3. ✅ Single `<Canvas>` with primitive-built `<HeroModel />`, lazy-loaded via `next/dynamic` `ssr: false`
 4. GSAP ScrollTrigger drives camera/scene state through sections
 5. Polish: lighting, post-processing, section transitions
 
