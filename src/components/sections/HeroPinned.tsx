@@ -64,26 +64,43 @@ export function HeroPinned() {
         3.6
       ).to(".hero-statement", { y: "-6vh", autoAlpha: 0, duration: 0.8 }, 5.0);
 
-      // Beat 3 (6.0–9.6): eyebrow → headline → checklist one by one → CTA.
-      const resolveIn = (target: string, at: number, dur = 0.6) =>
+      // Beat 3 (6.0–10): the resolve block assembles like the reference —
+      // each text block reveals word by word (a dim ghost of the word lands
+      // first, then it brightens to full, in reading order) and every rule
+      // grows from zero to full width, all scrubbed by the scroll.
+      const wordReveal = (sel: string, at: number, stagger = 0.07) => {
         tl.fromTo(
-          target,
-          { y: "2.5vh", autoAlpha: 0 },
-          { y: "0vh", autoAlpha: 1, duration: dur },
+          sel,
+          { opacity: 0 },
+          { opacity: 0.3, duration: 0.18, stagger },
           at
+        ).fromTo(
+          sel,
+          { opacity: 0.3 },
+          { opacity: 1, duration: 0.2, stagger, immediateRender: false },
+          at + 0.16
         );
-      resolveIn(".hero-eyebrow", 6.0);
-      resolveIn(".hero-headline", 6.3, 0.7);
+      };
+      const growLine = (sel: string, at: number) =>
+        tl.fromTo(sel, { scaleX: 0 }, { scaleX: 1, duration: 0.5 }, at);
+
+      wordReveal(".hero-eyebrow .hero-word", 6.0);
+      wordReveal(".hero-headline .hero-word", 6.4);
+      growLine(".hero-rule", 7.05);
+      site.hero.checklist.forEach((_, i) => {
+        const at = 7.5 + i * 0.5;
+        wordReveal(`.hero-check:nth-child(${i + 1}) .hero-word`, at, 0.05);
+        growLine(`.hero-check:nth-child(${i + 1}) .hero-check-line`, at + 0.1);
+      });
       tl.fromTo(
-        ".hero-check",
-        { y: "2vh", autoAlpha: 0 },
-        { y: "0vh", autoAlpha: 1, duration: 0.5, stagger: 0.4 },
-        7.0
+        ".hero-cta",
+        { y: "2.5vh", autoAlpha: 0 },
+        { y: "0vh", autoAlpha: 1, duration: 0.4 },
+        9.55
       );
-      resolveIn(".hero-cta", 8.9, 0.7);
 
       // Pad to 10 so the resting state lands just before the pin releases.
-      tl.to({}, { duration: 0.4 }, 9.6);
+      tl.to({}, { duration: 0.05 }, 9.95);
     },
     // revertOnUpdate: when `reduced` flips post-hydration, wipe the inline
     // tween styles so the static variant's classes fully take over.
@@ -98,6 +115,16 @@ export function HeroPinned() {
     "pointer-events-none absolute whitespace-nowrap text-[clamp(2.4rem,8vw,7.5rem)] font-extrabold uppercase leading-[0.95] tracking-tight text-foreground";
   const hiddenUnlessReduced = reduced ? "hidden" : "";
   const resolveItemClass = reduced ? "" : "opacity-0";
+  const lineInitial = reduced ? "" : "scale-x-0";
+  // Per-word spans for the scrubbed ghost→bright reveal (plain spaces between
+  // spans keep normal wrapping).
+  const words = (text: string) =>
+    text.split(" ").map((w, i) => (
+      <span key={i}>
+        {i > 0 ? " " : ""}
+        <span className={`hero-word ${resolveItemClass}`}>{w}</span>
+      </span>
+    ));
 
   return (
     <section
@@ -149,31 +176,37 @@ export function HeroPinned() {
 
         <div className="absolute inset-0 z-[5] flex items-center">
           <div className="section-shell">
-            <div className="max-w-xl">
-              <p
-                className={`hero-eyebrow ${resolveItemClass} mb-4 font-mono text-sm tracking-widest text-accent`}
-              >
-                {hero.eyebrow.toUpperCase()}
+            <div className="max-w-2xl">
+              <p className="hero-eyebrow mb-4 font-mono text-sm tracking-widest text-accent">
+                {words(hero.eyebrow.toUpperCase())}
               </p>
-              <h1
-                className={`hero-headline ${resolveItemClass} text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl`}
-              >
-                {hero.headline}
+              <h1 className="hero-headline text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl">
+                {words(hero.headline)}
               </h1>
-              <ul className="mt-8">
+              <div
+                aria-hidden
+                className={`hero-rule ${lineInitial} mt-6 h-px w-full origin-left bg-foreground/30`}
+              />
+              <ul className="mt-2">
                 {hero.checklist.map((item) => (
-                  <li
-                    key={item}
-                    className={`hero-check ${resolveItemClass} flex items-baseline gap-3 border-b border-border-soft py-2.5 text-base text-foreground`}
-                  >
-                    <span className="text-accent" aria-hidden>
-                      ✓
-                    </span>
-                    {item}
+                  <li key={item} className="hero-check">
+                    <div className="flex items-baseline gap-4 py-6 text-lg text-foreground sm:text-xl">
+                      <span
+                        className={`hero-word ${resolveItemClass} text-accent`}
+                        aria-hidden
+                      >
+                        ✓
+                      </span>
+                      <span>{words(item)}</span>
+                    </div>
+                    <div
+                      aria-hidden
+                      className={`hero-check-line ${lineInitial} h-px w-full origin-left bg-foreground/25`}
+                    />
                   </li>
                 ))}
               </ul>
-              <div className={`hero-cta ${resolveItemClass} mt-8`}>
+              <div className={`hero-cta ${resolveItemClass} mt-10`}>
                 <Button href={hero.cta.href}>{hero.cta.label}</Button>
               </div>
             </div>
