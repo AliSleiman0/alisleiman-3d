@@ -15,7 +15,7 @@ interface Keyframe {
 const KEYFRAMES: Keyframe[] = [
   { at: 0.0, position: [0, 0, 6], target: [0, 0, 0] }, // hero
   { at: 0.33, position: [1.2, 0.6, 5], target: [-2.0, 0.2, 0] }, // about
-  { at: 0.66, position: [0, 0.5, 10], target: [0, 0, 0] }, // projects
+  { at: 0.66, position: [2.4, 1.1, 7], target: [0, 0.2, 0] }, // projects (taxi)
   { at: 1.0, position: [0, -0.6, 4.2], target: [0, 0.4, 0] }, // contact
 ];
 

@@ -3,9 +3,8 @@
 import { Environment, Lightformer } from "@react-three/drei";
 import { CameraRig } from "./CameraRig";
 import { Lights } from "./Lights";
-import { HeroModel } from "./HeroModel";
+import { SceneManager } from "./SceneManager";
 import { ParticleField } from "./ParticleField";
-import { Effects } from "./Effects";
 import type { QualityTier } from "./quality";
 
 export function Scene({ quality }: { quality: QualityTier }) {
@@ -13,7 +12,7 @@ export function Scene({ quality }: { quality: QualityTier }) {
     <>
       <CameraRig />
       <Lights />
-      <HeroModel quality={quality} />
+      <SceneManager quality={quality} />
       <ParticleField quality={quality} />
       {quality === "high" && (
         <>
@@ -39,7 +38,8 @@ export function Scene({ quality }: { quality: QualityTier }) {
               color="#e0e7ff"
             />
           </Environment>
-          <Effects />
+          {/* <Effects /> is off while the ASCII renderer owns the high tier:
+              both take over the render loop and cannot coexist. */}
         </>
       )}
     </>
