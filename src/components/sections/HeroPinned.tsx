@@ -189,14 +189,15 @@ export function HeroPinned() {
           <span className="text-accent">.</span>
         </div>
 
+        <p
+          className={`hero-statement ${hiddenUnlessReduced} absolute bottom-[14vh] left-[4vw] z-[5] max-w-[92vw] text-[clamp(0.9rem,1.5vw,1.3rem)] font-medium tracking-wide md:whitespace-nowrap`}
+        >
+          {letters(hero.statement)}
+        </p>
+
         <div className="absolute inset-0 z-[5] flex items-center">
           <div className="section-shell">
             <div className="max-w-2xl">
-              <p
-                className={`hero-statement ${hiddenUnlessReduced} mb-6 text-[clamp(0.9rem,1.5vw,1.3rem)] font-medium tracking-wide sm:mb-8 md:whitespace-nowrap`}
-              >
-                {letters(hero.statement)}
-              </p>
               <p className="hero-eyebrow mb-4 font-mono text-sm tracking-widest text-accent">
                 {words(hero.eyebrow.toUpperCase())}
               </p>
