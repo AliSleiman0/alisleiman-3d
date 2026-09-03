@@ -56,13 +56,16 @@ export function HeroPinned() {
         .fromTo(".hero-line-front", { x: "0vw" }, { x: "65vw", duration: 3.6 }, 0)
         .to(".hero-line-front", { autoAlpha: 0, duration: 0.6 }, 3.0);
 
-      // Beat 2 (3.6–5.8): the statement slides through.
+      // Beat 2 (3.4–5.8): the kicker at the top writes itself letter by
+      // letter — each letter fades in while the next is only starting, so the
+      // reveal reads sequentially, never whole words at once. Then the line
+      // fades out as a whole before the resolve block builds.
       tl.fromTo(
-        ".hero-statement",
-        { y: "7vh", autoAlpha: 0 },
-        { y: "0vh", autoAlpha: 1, duration: 1.0 },
-        3.6
-      ).to(".hero-statement", { y: "-6vh", autoAlpha: 0, duration: 0.8 }, 5.0);
+        ".hero-letter",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.25, stagger: 0.055 },
+        3.4
+      ).to(".hero-statement", { autoAlpha: 0, duration: 0.5 }, 5.3);
 
       // Beat 3 (6.0–10): the resolve block assembles like the reference —
       // each text block reveals word by word (a dim ghost of the word lands
@@ -125,6 +128,17 @@ export function HeroPinned() {
         <span className={`hero-word ${resolveItemClass}`}>{w}</span>
       </span>
     ));
+  // Per-letter spans for the kicker's scrubbed fade (spaces stay plain text).
+  const letters = (text: string) =>
+    text.split("").map((ch, i) =>
+      ch === " " ? (
+        " "
+      ) : (
+        <span key={i} className={`hero-letter ${resolveItemClass}`}>
+          {ch}
+        </span>
+      )
+    );
 
   return (
     <section
@@ -169,9 +183,9 @@ export function HeroPinned() {
         </div>
 
         <p
-          className={`hero-statement ${hiddenUnlessReduced} absolute bottom-[18vh] left-[6vw] z-[5] max-w-[15ch] text-[clamp(2rem,5.4vw,4.6rem)] font-bold leading-[1.06] tracking-tight opacity-0`}
+          className={`hero-statement ${hiddenUnlessReduced} absolute inset-x-0 top-[14vh] z-[5] whitespace-nowrap text-center text-[clamp(0.85rem,2.4vw,1.8rem)] font-medium tracking-wide`}
         >
-          {hero.statement}
+          {letters(hero.statement)}
         </p>
 
         <div className="absolute inset-0 z-[5] flex items-center">
