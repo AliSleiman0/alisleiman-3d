@@ -1,6 +1,6 @@
 # alisleiman-3d — Scroll-Based 3D Portfolio
 
-Personal portfolio for Ali Sleiman (software engineer). A fixed React Three Fiber canvas sits behind the page; content sections scroll over it while GSAP ScrollTrigger drives the camera along a keyframed path and swaps between cinematic 3D "acts" (ASCII hero → wireframe about beat → real `.glb` project models). Fully static Next.js output — the 3D layer is lazy-loaded client-side and never touches SSR/SEO.
+Personal portfolio for Ali Sleiman (software engineer). The page opens on a pinned-photo hero — a sticky full-bleed photo with a depth-occluded headline (a foreground cutout of the subject genuinely hides the text behind him) and scroll-scrubbed beats that assemble word by word. Behind the sections below sits a fixed React Three Fiber canvas: GSAP ScrollTrigger drives the camera along a keyframed path and swaps between cinematic 3D "acts" (wireframe about beat → real `.glb` project models). Fully static Next.js output — the 3D layer is lazy-loaded client-side and never touches SSR/SEO.
 
 ## Stack
 
@@ -20,10 +20,11 @@ npx tsc --noEmit # type check
 
 ## How it's wired
 
-- `src/components/3d/Hero3D.tsx` — the single entry to the 3D layer (`next/dynamic`, `ssr: false`, quality-gated with a CSS-glow fallback)
+- `src/components/sections/HeroPinned.tsx` — the pinned-photo hero: 700svh scroll runway, sticky stage, photo/occluded-line/cutout/front-UI layer sandwich, one scrubbed GSAP timeline for the beats; assets in `public/hero/` (photo + rembg cutout), copy in `site.hero`
+- `src/components/3d/Hero3D.tsx` — the single entry to the 3D layer (`next/dynamic`, `ssr: false`, quality-gated with a CSS-glow fallback); covered by the photo during the hero pin
 - `src/components/ScrollManager.tsx` + `src/lib/scroll.ts` — GSAP writes scroll progress into a plain mutable object; R3F `useFrame` reads it. No React state in the frame loop, with one exception: `activeAct` (which act is mounted) changes only at transition boundaries, same as the existing `activeSection`.
 - `src/components/3d/SceneManager.tsx` + `src/components/3d/acts/` — the 3D layer is a sequence of scroll-triggered "acts" (cinematic scenes), not one persistent object. Exactly one act is mounted at a time; `ScrollManager` drives GSAP scale+fade transitions between them.
-- `src/components/3d/CameraRig.tsx` — keyframed camera path (hero → about → projects → contact)
+- `src/components/3d/CameraRig.tsx` — keyframed camera path (parked while the hero covers the canvas → about → projects → contact), `at` values hand-tuned to measured section offsets
 - `src/data/` — all content (projects, site info) as typed data; nothing hardcoded in JSX
 - Quality tiers (`src/components/3d/quality.ts`): no-WebGL/reduced-motion → static CSS glow · mobile/low-end → fewer particles, no post-processing, acts swap instantly with no transition tween · desktop → full effects
 
@@ -35,4 +36,4 @@ Full conventions, architecture map, and current status: see **AGENTS.md** (CLAUD
 
 ## Status
 
-All 5 planned build stages complete, plus checkpoint 1 of the cinematic-acts restructure (Hero → About → AllwaytaxiAct, real `car.glb`). Remaining acts (Luminee, Lacpa, ConstructIQ, Avid, Contact), real project copy, and Vercel deploy are next. Details in AGENTS.md → "Current status".
+All 5 planned build stages complete, plus checkpoint 1 of the cinematic-acts restructure (About → AllwaytaxiAct, real `car.glb`) and the pinned-photo hero (stage 7, replacing the 3D hero act). Hero photo + copy are placeholders; remaining acts (Luminee, Lacpa, ConstructIQ, Avid, Contact), real project copy, and Vercel deploy are next. Details in AGENTS.md → "Current status".
