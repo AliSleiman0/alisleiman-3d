@@ -21,7 +21,7 @@ Next.js (App Router) + TypeScript · Tailwind CSS · React Three Fiber + @react-
 1. ✅ Scaffold + folder structure + typed placeholder data
 2. ✅ Static 2D layout (hero, about, projects grid, contact) — deployable fallback on its own, no 3D
 3. ✅ Single `<Canvas>` with primitive-built `<HeroModel />`, lazy-loaded via `next/dynamic` `ssr: false`
-4. GSAP ScrollTrigger drives camera/scene state through sections
+4. ✅ GSAP ScrollTrigger drives camera/scene state through sections
 5. Polish: lighting, post-processing, section transitions
 
 ## Folder structure
@@ -44,7 +44,8 @@ public/models/            Real .glb assets go here when available
 - **Dispose on unmount**: geometries, materials, and textures created imperatively (`new THREE.*` or `useMemo`) must be disposed in a cleanup effect. Declarative JSX primitives are handled by R3F, but anything manually created is your responsibility.
 - **Model swap path**: `<HeroModel />` currently renders a primitive shape but is structured so a `useGLTF("/models/….glb")` version drops in as a replacement without touching the rest of the scene.
 - **Degrade gracefully**: provide a low-poly or 2D fallback for low-end/mobile devices (reduced DPR, fewer particles, or no canvas at all). The stage-2 static layout is the ultimate fallback.
-- ScrollTrigger registration/cleanup goes through `useGSAP()`; don't hand-roll `ScrollTrigger.create` without cleanup.
+- ScrollTrigger registration/cleanup goes through `useGSAP()`; don't hand-roll `ScrollTrigger.create` without cleanup. All triggers live in `components/ScrollManager.tsx`.
+- **Scroll bridge**: GSAP and R3F meet only through `src/lib/scroll.ts`. ScrollTrigger writes `scrollState.progress` (plain mutation); `useFrame` callbacks read it. Never route per-frame scroll values through React state. The 3D layer never imports gsap; ScrollManager never imports three.
 
 ## Content conventions
 

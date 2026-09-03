@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { PointMaterial } from "@react-three/drei";
 import type { Points } from "three";
+import { scrollState } from "@/lib/scroll";
 import type { QualityTier } from "./quality";
 
 /** Random points in a spherical shell around the hero model. */
@@ -27,7 +28,10 @@ export function ParticleField({ quality }: { quality: QualityTier }) {
 
   useFrame((state) => {
     if (!points.current) return;
-    points.current.rotation.y = state.clock.elapsedTime * 0.015;
+    // Base drift plus a scroll-linked sweep so the field responds to scrubbing.
+    points.current.rotation.y =
+      state.clock.elapsedTime * 0.015 + scrollState.progress * 0.6;
+    points.current.rotation.x = scrollState.progress * 0.25;
   });
 
   return (

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Icosahedron, MeshDistortMaterial } from "@react-three/drei";
 import type { Mesh } from "three";
+import { scrollState } from "@/lib/scroll";
 import type { QualityTier } from "./quality";
 
 /**
@@ -18,9 +19,14 @@ export function HeroModel({ quality }: { quality: QualityTier }) {
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     if (!mesh.current) return;
-    mesh.current.rotation.y = t * 0.12;
-    mesh.current.rotation.x = Math.sin(t * 0.2) * 0.15;
+    const p = scrollState.progress;
+    // Spin picks up mid-page; shrink slightly during the projects pull-back.
+    mesh.current.rotation.y = t * 0.12 + p * 2.2;
+    mesh.current.rotation.x = Math.sin(t * 0.2) * 0.15 + p * 0.5;
     mesh.current.position.y = Math.sin(t * 0.5) * 0.15;
+    const midPage = Math.sin(Math.min(p, 0.9) * Math.PI);
+    const scale = 1 - midPage * 0.25;
+    mesh.current.scale.setScalar(scale);
   });
 
   return (

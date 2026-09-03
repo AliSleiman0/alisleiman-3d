@@ -1,12 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { site } from "@/data/site";
+import { getActiveSection, subscribeActiveSection } from "@/lib/scroll";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const activeSection = useSyncExternalStore(
+    subscribeActiveSection,
+    getActiveSection,
+    () => "hero"
+  );
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -22,16 +28,29 @@ export function Navbar() {
           </a>
 
           <ul className="hidden items-center gap-8 md:flex">
-            {site.nav.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  className="text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
+            {site.nav.map((item) => {
+              const isActive = item.href === `#${activeSection}`;
+              return (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    aria-current={isActive ? "true" : undefined}
+                    className={cn(
+                      "relative text-sm transition-colors hover:text-foreground",
+                      isActive ? "text-foreground" : "text-muted"
+                    )}
+                  >
+                    {item.label}
+                    <span
+                      className={cn(
+                        "absolute -bottom-1.5 left-0 h-px w-full bg-accent transition-opacity",
+                        isActive ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                  </a>
+                </li>
+              );
+            })}
           </ul>
 
           <button
@@ -77,7 +96,12 @@ export function Navbar() {
                   <a
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className="block py-3 text-2xl font-medium text-foreground"
+                    className={cn(
+                      "block py-3 text-2xl font-medium",
+                      item.href === `#${activeSection}`
+                        ? "text-accent"
+                        : "text-foreground"
+                    )}
                   >
                     {item.label}
                   </a>

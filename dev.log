@@ -1,0 +1,85 @@
+
+> alisleiman-3d@0.1.0 dev
+> next dev
+
+▲ Next.js 16.3.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://100.68.140.105:3000
+✓ Ready in 1082ms
+✓ Running next.config.ts took 85ms
+
+ GET / 200 in 1283ms (next.js: 785ms, application-code: 497ms)
+ GET / 200 in 134ms (next.js: 7ms, application-code: 126ms)
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+✓ Compiled in 152ms
+✓ Compiled in 51ms
+✓ Compiled in 54ms
+✓ Compiled in 85ms
+✓ Compiled in 61ms
+✓ Compiled in 102ms
+✓ Compiled in 59ms
+✓ Compiled in 201ms
+✓ Compiled in 156ms
+ GET / 200 in 215ms (next.js: 13ms, application-code: 202ms)
+[browser] React instrumentation encountered an error: 'Error: The children should not have changed if we pass in the same set.\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:121140)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116568)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateVirtualInstanceRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:115002)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116771)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116568)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)\n' +
+  '    at updateFiberRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:120463)\n' +
+  '    at updateVirtualChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116478)\n' +
+  '    at updateChildrenRecursively (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:116917)' (chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js:1:86461)
+✓ Compiled in 149ms
+ GET / 200 in 90ms (next.js: 14ms, application-code: 76ms)
+✓ Compiled in 42ms
+ GET / 200 in 99ms (next.js: 12ms, application-code: 88ms)
+ GET / 200 in 152ms (next.js: 11ms, application-code: 141ms)
+✓ Compiled in 782ms
+ GET / 200 in 316ms (next.js: 33ms, application-code: 283ms)
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+ GET / 200 in 385ms (next.js: 82ms, application-code: 303ms)
+ GET / 200 in 279ms (next.js: 13ms, application-code: 266ms)
+[browser] THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
