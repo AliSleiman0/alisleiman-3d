@@ -56,16 +56,23 @@ export function HeroPinned() {
         .fromTo(".hero-line-front", { x: "0vw" }, { x: "65vw", duration: 3.6 }, 0)
         .to(".hero-line-front", { autoAlpha: 0, duration: 0.6 }, 3.0);
 
-      // Beat 2 (3.4–5.8): the kicker at the top writes itself letter by
-      // letter — each letter fades in while the next is only starting, so the
-      // reveal reads sequentially, never whole words at once. Then the line
-      // fades out as a whole before the resolve block builds.
+      // Beat 2 (3.4–5.9): the kicker at the top writes itself letter by
+      // letter, and a second wave fades the same letters back out in order,
+      // 0.75s behind — a rolling ~two-word window sweeps through the line
+      // (leading edge writing in, trailing edge dissolving) and the last
+      // letters are gone just before the resolve block builds. Per letter the
+      // in/out intervals never overlap (0.75 gap > 0.25 duration).
       tl.fromTo(
         ".hero-letter",
         { opacity: 0 },
         { opacity: 1, duration: 0.25, stagger: 0.055 },
         3.4
-      ).to(".hero-statement", { autoAlpha: 0, duration: 0.5 }, 5.3);
+      ).fromTo(
+        ".hero-letter",
+        { opacity: 1 },
+        { opacity: 0, duration: 0.25, stagger: 0.055, immediateRender: false },
+        4.05
+      );
 
       // Beat 3 (6.0–10): the resolve block assembles like the reference —
       // each text block reveals word by word (a dim ghost of the word lands
