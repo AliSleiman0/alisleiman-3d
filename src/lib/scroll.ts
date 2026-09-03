@@ -26,10 +26,11 @@ export function getActiveSection(): string {
   return activeSection;
 }
 
-/** Which 3D "act" is currently mounted — subscribable, same shape as activeSection. */
-export type ActName = "hero" | "about" | "taxi";
+/** Which 3D "act" is currently mounted — subscribable, same shape as activeSection.
+ * "none" = canvas idle (the pinned-photo hero covers the viewport; nothing to render). */
+export type ActName = "none" | "about" | "taxi";
 
-let activeAct: ActName = "hero";
+let activeAct: ActName = "none";
 const actListeners = new Set<() => void>();
 
 export function setActiveAct(name: ActName) {

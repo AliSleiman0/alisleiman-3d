@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotionPref } from "@/lib/useReducedMotionPref";
 
 interface RevealProps {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ interface RevealProps {
 
 /** Fade-up entrance when the element scrolls into view (once). */
 export function Reveal({ children, delay = 0, className }: RevealProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotionPref();
 
   if (reduceMotion) {
     return <div className={className}>{children}</div>;

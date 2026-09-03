@@ -19,7 +19,7 @@ gsap.registerPlugin(ScrollTrigger);
 /** Interim: Projects maps 1:1 to the taxi act until the other four project
  * acts exist and this section gets split into per-project sub-triggers. */
 const SECTION_TO_ACT: Record<string, ActName | undefined> = {
-  hero: "hero",
+  hero: "none", // pinned-photo hero covers the canvas — park it empty
   about: "about",
   projects: "taxi",
 };

@@ -1,11 +1,12 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Project } from "@/lib/types";
 import { Tag } from "./Tag";
+import { useReducedMotionPref } from "@/lib/useReducedMotionPref";
 
 export function ProjectCard({ project }: { project: Project }) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotionPref();
   const accent = project.accentColor ?? "var(--accent)";
 
   return (

@@ -7,10 +7,10 @@ import type { Mesh } from "three";
 import type { QualityTier } from "../quality";
 import { useActTransition } from "./useActTransition";
 
-/** The transitional beat between Hero and the project acts — a wireframe
- * torus knot: an open, linear silhouette against Hero's solid ASCII sphere,
- * cheap, no model. Mid-journey steel blue continues the same color story
- * HeroAct uses rather than introducing a new palette. */
+/** The first 3D beat (the hero is now the 2D pinned-photo sequence) — a
+ * wireframe torus knot: an open, linear silhouette, cheap, no model.
+ * Mid-journey steel blue continues the site's indigo→steel→violet color
+ * story rather than introducing a new palette. */
 export function AboutAct({ quality }: { quality: QualityTier }) {
   const mesh = useRef<Mesh>(null);
   const applyTransition = useActTransition();

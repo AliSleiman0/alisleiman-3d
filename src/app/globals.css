@@ -60,29 +60,6 @@ body {
       transparent 70%
     );
   }
-
-  /* drei's AsciiRenderer injects this element itself; it can't take a
-     className prop, so HeroModel tags it and the styling lives here. */
-  .ascii-hero {
-    font-family: var(--font-geist-mono), monospace;
-    line-height: 1;
-    user-select: none;
-    /* Mouse-reveal: full detail near the cursor (--reveal-x/y, written
-       directly by HeroModel), dim/sparse everywhere else. Falls back to
-       viewport center when the vars are unset (pre-interaction, touch). */
-    -webkit-mask-image: radial-gradient(
-      circle 220px at var(--reveal-x, 50vw) var(--reveal-y, 50vh),
-      white 0%,
-      white 30%,
-      rgba(255, 255, 255, 0.18) 100%
-    );
-    mask-image: radial-gradient(
-      circle 220px at var(--reveal-x, 50vw) var(--reveal-y, 50vh),
-      white 0%,
-      white 30%,
-      rgba(255, 255, 255, 0.18) 100%
-    );
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

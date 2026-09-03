@@ -21,8 +21,8 @@ const MODEL_PATH = "/models/car.glb";
 // bundle-splitting benefit to capture — revisit once acts are code-split.
 useGLTF.preload(MODEL_PATH);
 
-// Same journey HeroAct uses — duplicated (not shared) since there are only
-// two call sites so far.
+// The site's indigo→steel→violet color journey — duplicated (not shared)
+// since there are only two call sites so far.
 const COLOR_STOPS = [
   new Color("#312e81"),
   new Color("#1e40af"),
@@ -32,9 +32,9 @@ const scratchColor = new Color();
 
 // From the logged bbox: size [1.5, 1.5, 2.75], min.y ≈ 0 — the model already
 // sits on its own ground plane at the origin, no vertical offset needed.
-// Length (2.75) is close to HeroAct's icosahedron diameter (2.7), so scale 1
-// keeps consistent visual weight across acts; nudged down slightly since the
-// car reads bulkier than the sphere at the same footprint.
+// Length (2.75) is close to the torus knot's footprint, so scale 1 keeps
+// consistent visual weight across acts; nudged down slightly since the car
+// reads bulkier at the same footprint.
 const CAR_SCALE = 0.85;
 const CAR_POSITION: [number, number, number] = [0, 0, 0];
 const CAR_ROTATION: [number, number, number] = [0, 0, 0];

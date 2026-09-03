@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotionPref } from "@/lib/useReducedMotionPref";
 
 interface AnimatedTitleProps {
   text: string;
@@ -9,7 +10,7 @@ interface AnimatedTitleProps {
 
 /** H1 with a per-letter staggered rise-in. Screen readers get the plain text. */
 export function AnimatedTitle({ text, className }: AnimatedTitleProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotionPref();
 
   if (reduceMotion) {
     return <h1 className={className}>{text}</h1>;
