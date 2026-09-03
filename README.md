@@ -1,6 +1,6 @@
 # alisleiman-3d — Scroll-Based 3D Portfolio
 
-Personal portfolio for Ali Sleiman (software engineer). A fixed React Three Fiber canvas sits behind the page; content sections scroll over it while GSAP ScrollTrigger drives the camera along a keyframed path. Fully static Next.js output — the 3D layer is lazy-loaded client-side and never touches SSR/SEO.
+Personal portfolio for Ali Sleiman (software engineer). A fixed React Three Fiber canvas sits behind the page; content sections scroll over it while GSAP ScrollTrigger drives the camera along a keyframed path and swaps between cinematic 3D "acts" (ASCII hero → wireframe about beat → real `.glb` project models). Fully static Next.js output — the 3D layer is lazy-loaded client-side and never touches SSR/SEO.
 
 ## Stack
 
@@ -21,17 +21,18 @@ npx tsc --noEmit # type check
 ## How it's wired
 
 - `src/components/3d/Hero3D.tsx` — the single entry to the 3D layer (`next/dynamic`, `ssr: false`, quality-gated with a CSS-glow fallback)
-- `src/components/ScrollManager.tsx` + `src/lib/scroll.ts` — GSAP writes scroll progress into a plain mutable object; R3F `useFrame` reads it. No React state in the frame loop.
+- `src/components/ScrollManager.tsx` + `src/lib/scroll.ts` — GSAP writes scroll progress into a plain mutable object; R3F `useFrame` reads it. No React state in the frame loop, with one exception: `activeAct` (which act is mounted) changes only at transition boundaries, same as the existing `activeSection`.
+- `src/components/3d/SceneManager.tsx` + `src/components/3d/acts/` — the 3D layer is a sequence of scroll-triggered "acts" (cinematic scenes), not one persistent object. Exactly one act is mounted at a time; `ScrollManager` drives GSAP scale+fade transitions between them.
 - `src/components/3d/CameraRig.tsx` — keyframed camera path (hero → about → projects → contact)
 - `src/data/` — all content (projects, site info) as typed data; nothing hardcoded in JSX
-- Quality tiers (`src/components/3d/quality.ts`): no-WebGL/reduced-motion → static CSS glow · mobile/low-end → fewer particles, no post-processing · desktop → full effects
+- Quality tiers (`src/components/3d/quality.ts`): no-WebGL/reduced-motion → static CSS glow · mobile/low-end → fewer particles, no post-processing, acts swap instantly with no transition tween · desktop → full effects
 
 Full conventions, architecture map, and current status: see **AGENTS.md** (CLAUDE.md points there).
 
-## Swapping in a real model
+## Adding a new act with a real model
 
-Drop a `.glb` at `public/models/hero.glb` and follow the commented `useGLTF` swap inside `src/components/3d/HeroModel.tsx` — one component body changes, nothing else.
+`src/components/3d/acts/AllwaytaxiAct.tsx` is the reference pattern: `useGLTF("/models/….glb")`, inspect the actual bounding box (logged on mount, dev-only) before hardcoding scale/position constants — never guess a community-uploaded model's transform — and tint via emissive/color lerp toward the existing scroll color journey rather than replacing materials wholesale. Register the new act in `SceneManager.tsx` and map a scroll section to it in `ScrollManager.tsx`'s `SECTION_TO_ACT`.
 
 ## Status
 
-All 5 planned build stages complete (scaffold → static 2D fallback → lazy 3D canvas → scroll-driven camera → post-processing polish). Next up: redesigning the hero centerpiece (current distorted-sphere placeholder lacks identity), real project copy, and Vercel deploy. Details in AGENTS.md → "Current status".
+All 5 planned build stages complete, plus checkpoint 1 of the cinematic-acts restructure (Hero → About → AllwaytaxiAct, real `car.glb`). Remaining acts (Luminee, Lacpa, ConstructIQ, Avid, Contact), real project copy, and Vercel deploy are next. Details in AGENTS.md → "Current status".

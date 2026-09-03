@@ -20,9 +20,10 @@ Next.js (App Router) + TypeScript · Tailwind CSS · React Three Fiber + @react-
 
 1. ✅ Scaffold + folder structure + typed placeholder data
 2. ✅ Static 2D layout (hero, about, projects grid, contact) — deployable fallback on its own, no 3D
-3. ✅ Single `<Canvas>` with primitive-built `<HeroModel />`, lazy-loaded via `next/dynamic` `ssr: false`
+3. ✅ Single `<Canvas>` with a primitive-built hero shape, lazy-loaded via `next/dynamic` `ssr: false` (the shape itself was later relocated into `components/3d/acts/HeroAct.tsx` — see stage 6 below)
 4. ✅ GSAP ScrollTrigger drives camera/scene state through sections
-5. ✅ Polish: lighting, post-processing, section transitions (post-processing + env reflections are high-tier only — `Effects.tsx` and the `<Environment>` block mount solely when `quality === "high"`)
+5. ✅ Polish: lighting, post-processing, section transitions (env reflections are high-tier only — the `<Environment>` block mounts solely when `quality === "high"`; `Effects.tsx`, the bloom/vignette composer, is defined but not currently mounted — see stage 6)
+6. 🚧 Cinematic acts restructure — the 3D layer is now a sequence of scroll-triggered "acts" (`components/3d/acts/`) instead of one persistent object; checkpoint 1 (Hero → About → AllwaytaxiAct) shipped, five acts remain — see "Current status" below
 
 ## Folder structure
 
@@ -55,7 +56,7 @@ public/models/            Real .glb assets (car.glb, robot.glb, documents.glb, c
 
 ## Architecture map (who does what)
 
-- `components/ScrollManager.tsx` — owns ALL ScrollTriggers: full-page scrub → `scrollState.progress`; per-section triggers → active section id, and (via `transitionTo()`) the act-to-act GSAP transition — tweens `transitionState.t` out/in and calls `setActiveAct()` at the swap point. Interim: the `projects` section triggers the `taxi` act 1:1 until the other four project acts exist and this section splits into per-project sub-triggers. Renders null.
+- `components/ScrollManager.tsx` — owns ALL ScrollTriggers: full-page scrub → `scrollState.progress`; per-section triggers → active section id, and (via `transitionTo()`) the act-to-act GSAP transition — tweens `transitionState.t` out/in and calls `setActiveAct()` at the swap point. Interim: the `projects` section triggers the `taxi` act 1:1 until the other four project acts exist and this section splits into per-project sub-triggers. Renders null. **Gotcha**: fast scroll can interrupt a transition before its `setActiveAct()` call fires — `interruptInFlight()`/`pendingTarget` exist specifically to land that pending act-swap before starting the next transition, so `activeAct` never gets stranded mid-flight. Don't simplify away `pendingTarget` without re-testing rapid back-and-forth scrolling.
 - `lib/scroll.ts` — the GSAP↔R3F bridge: mutable `scrollState` + `transitionState` (per-frame, no React) + subscribable `activeSection` and `activeAct` (`useSyncExternalStore`, changes only at boundaries).
 - `components/3d/Hero3D.tsx` — the only 3D component the page imports. `next/dynamic` `ssr:false`, quality gate, CSS-glow fallback, vignette overlay.
 - `components/3d/quality.ts` — `useQualityTier()`: `off` (no WebGL / reduced motion → CSS glow only) · `low` (coarse pointer / ≤4 cores → 400 particles, DPR ≤1.5, no post-processing) · `high` (1200 particles, DPR 2, Effects + Environment).
