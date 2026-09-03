@@ -1,6 +1,7 @@
 import { site } from "@/data/site";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { AnimatedTitle } from "@/components/ui/AnimatedTitle";
 
 export function Hero() {
   return (
@@ -14,11 +15,10 @@ export function Hero() {
             {site.role.toUpperCase()}
           </p>
         </Reveal>
-        <Reveal delay={0.1}>
-          <h1 className="max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-7xl">
-            {site.name}
-          </h1>
-        </Reveal>
+        <AnimatedTitle
+          text={site.name}
+          className="max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-7xl"
+        />
         <Reveal delay={0.2}>
           <p className="mt-6 max-w-xl text-lg leading-8 text-muted">
             {site.tagline}

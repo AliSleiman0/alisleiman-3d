@@ -12,6 +12,7 @@ export function Contact() {
       />
 
       <div className="section-shell">
+        <div className="section-divider mb-24 sm:mb-32" />
         <Reveal>
           <SectionHeading
             overline="03 · Contact"

@@ -8,6 +8,7 @@ export function Projects() {
   return (
     <section id="projects" className="py-24 sm:py-32">
       <div className="section-shell">
+        <div className="section-divider mb-24 sm:mb-32" />
         <Reveal>
           <SectionHeading
             overline="02 · Projects"

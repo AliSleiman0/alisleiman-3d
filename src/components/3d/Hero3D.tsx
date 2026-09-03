@@ -33,7 +33,7 @@ export function Hero3D() {
         <HeroCanvas quality={tier} />
       )}
       {/* Vignette keeps text readable over the brightest parts of the scene. */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,var(--background)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_60%,var(--background)_100%)]" />
     </div>
   );
 }

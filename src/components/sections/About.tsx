@@ -7,6 +7,7 @@ export function About() {
   return (
     <section id="about" className="py-24 sm:py-32">
       <div className="section-shell">
+        <div className="section-divider mb-24 sm:mb-32" />
         <Reveal>
           <SectionHeading overline="01 · About" title="Engineer across the stack" />
         </Reveal>

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { site } from "@/data/site";
 import { getActiveSection, subscribeActiveSection } from "@/lib/scroll";
 import { cn } from "@/lib/utils";
+import { ScrollProgressBar } from "./ScrollProgressBar";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -16,7 +17,8 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
-      <nav className="border-b border-border-soft bg-background/70 backdrop-blur-md">
+      <nav className="relative border-b border-border-soft bg-background/70 backdrop-blur-md">
+        <ScrollProgressBar />
         <div className="section-shell flex h-16 items-center justify-between">
           <a
             href="#hero"

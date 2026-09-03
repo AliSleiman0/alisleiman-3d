@@ -3,9 +3,17 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Icosahedron, MeshDistortMaterial } from "@react-three/drei";
-import type { Mesh } from "three";
+import { Color, type Mesh, type MeshStandardMaterial } from "three";
 import { scrollState } from "@/lib/scroll";
 import type { QualityTier } from "./quality";
+
+/** Body color drifts through the scroll journey: indigo → steel blue → violet. */
+const COLOR_STOPS = [
+  new Color("#312e81"),
+  new Color("#1e40af"),
+  new Color("#4c1d95"),
+];
+const scratchColor = new Color();
 
 /**
  * When a real model exists, drop it in /public/models and swap the primitive
@@ -27,6 +35,14 @@ export function HeroModel({ quality }: { quality: QualityTier }) {
     const midPage = Math.sin(Math.min(p, 0.9) * Math.PI);
     const scale = 1 - midPage * 0.25;
     mesh.current.scale.setScalar(scale);
+
+    const material = mesh.current.material as MeshStandardMaterial;
+    if (material?.color) {
+      const seg = p < 0.5 ? 0 : 1;
+      const t = (p - seg * 0.5) / 0.5;
+      scratchColor.lerpColors(COLOR_STOPS[seg], COLOR_STOPS[seg + 1], t);
+      material.color.copy(scratchColor);
+    }
   });
 
   return (
@@ -34,7 +50,7 @@ export function HeroModel({ quality }: { quality: QualityTier }) {
       <MeshDistortMaterial
         color="#312e81"
         emissive="#1e1b4b"
-        emissiveIntensity={0.4}
+        emissiveIntensity={0.6}
         roughness={0.2}
         metalness={0.8}
         distort={0.32}

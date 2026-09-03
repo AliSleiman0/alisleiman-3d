@@ -22,7 +22,7 @@ Next.js (App Router) + TypeScript · Tailwind CSS · React Three Fiber + @react-
 2. ✅ Static 2D layout (hero, about, projects grid, contact) — deployable fallback on its own, no 3D
 3. ✅ Single `<Canvas>` with primitive-built `<HeroModel />`, lazy-loaded via `next/dynamic` `ssr: false`
 4. ✅ GSAP ScrollTrigger drives camera/scene state through sections
-5. Polish: lighting, post-processing, section transitions
+5. ✅ Polish: lighting, post-processing, section transitions (post-processing + env reflections are high-tier only — `Effects.tsx` and the `<Environment>` block mount solely when `quality === "high"`)
 
 ## Folder structure
 

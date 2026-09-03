@@ -42,6 +42,17 @@ body {
     @apply mx-auto w-full max-w-6xl px-6 sm:px-10;
   }
 
+  .section-divider {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--border-soft) 20%,
+      var(--border-soft) 80%,
+      transparent
+    );
+    height: 1px;
+  }
+
   .glow {
     background: radial-gradient(
       circle at center,
