@@ -13,10 +13,12 @@ interface Keyframe {
 
 /** Camera path through the page. `at` = full-page scroll progress.
  *
- * Measured live at 1178×1110 (hero runway = 700svh): hero 0→0.834,
- * about 0.834→0.936, projects 0.936→1.038, contact past the end. The hero's
- * photo covers the canvas for its whole runway, so the camera parks on the
- * About pose until ~0.83 and only travels once the canvas is actually visible.
+ * Measured live at 1178×1110, with BOTH runways in place (hero 700svh, Projects
+ * 175svh): hero 0→0.701, about 0.701→0.801, projects 0.801→1.029, contact past
+ * the end. The hero's photo covers the canvas for its whole runway, so the
+ * camera parks on the About pose until ~0.70 and only travels once the canvas
+ * is actually visible. Projects owns a fifth of total progress now that it has
+ * its own scroll runway — re-measure whenever either runway length changes.
  *
  * CAVEAT: these fractions move with viewport HEIGHT, not just section heights.
  * The hero runway is viewport-proportional (700svh) while every other section
@@ -27,10 +29,10 @@ interface Keyframe {
  * Re-measure with section offsetTop ÷ (scrollHeight − innerHeight). */
 const KEYFRAMES: Keyframe[] = [
   { at: 0.0, position: [1.2, 0.6, 5], target: [-2.0, 0.2, 0] }, // parked (hero covers canvas)
-  { at: 0.83, position: [1.2, 0.6, 5], target: [-2.0, 0.2, 0] }, // about — canvas revealed
+  { at: 0.70, position: [1.2, 0.6, 5], target: [-2.0, 0.2, 0] }, // about — canvas revealed
   // Projects is a 2D image grid with no act behind it (SceneManager renders
   // null there), so this keyframe only steers the particle background.
-  { at: 0.94, position: [2.4, 1.1, 7], target: [0, 0.2, 0] }, // projects
+  { at: 0.80, position: [2.4, 1.1, 7], target: [0, 0.2, 0] }, // projects
   { at: 1.0, position: [0, -0.6, 4.2], target: [0, 0.4, 0] }, // contact
 ];
 
