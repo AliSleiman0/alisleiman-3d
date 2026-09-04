@@ -13,6 +13,7 @@ import {
   type ActName,
 } from "@/lib/scroll";
 import { site } from "@/data/site";
+import { detectLowMotion } from "@/lib/motionTier";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,12 +44,7 @@ export function ScrollManager() {
     const reduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    // Duplicated (not imported) from quality.ts's detectTier heuristic on
-    // purpose: quality.ts is documented 3D-layer-only, and this file must
-    // not import from it to keep that boundary legible.
-    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
-    const fewCores = (navigator.hardwareConcurrency ?? 8) <= 4;
-    const skipTransitionTween = reduceMotion || coarsePointer || fewCores;
+    const skipTransitionTween = detectLowMotion();
 
     function interruptInFlight() {
       if (!timelineRef.current) return;
