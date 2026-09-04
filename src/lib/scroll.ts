@@ -27,8 +27,9 @@ export function getActiveSection(): string {
 }
 
 /** Which 3D "act" is currently mounted — subscribable, same shape as activeSection.
- * "none" = canvas idle (the pinned-photo hero covers the viewport; nothing to render). */
-export type ActName = "none" | "about" | "taxi";
+ * "none" = canvas idle: the pinned-photo hero covers the viewport, and the
+ * Projects section is a 2D image grid rather than a 3D beat. */
+export type ActName = "none" | "about";
 
 let activeAct: ActName = "none";
 const actListeners = new Set<() => void>();

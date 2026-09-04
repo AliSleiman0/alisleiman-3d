@@ -1,9 +1,16 @@
 import type { Project } from "@/lib/types";
 
+/**
+ * Order is meaningful: the Projects grid assigns tile geometry by index, and
+ * slot 3 (index 2) is the tall portrait tile at the centre of the composition.
+ * Reordering here reshuffles the layout — see components/sections/ProjectsGrid.
+ *
+ * Prose is still placeholder; real case-study copy is a pending content task.
+ */
 export const projects: Project[] = [
   {
-    slug: "pretrial-intelligence-agent",
-    title: "AI Pre-Trial Intelligence Agent",
+    slug: "avid",
+    title: "Avid",
     summary:
       "An AI-powered agent that assembles pre-trial intelligence from case documents, filings, and public records.",
     description:
@@ -15,12 +22,13 @@ export const projects: Project[] = [
       "Entity and relationship extraction",
       "Research synthesis for legal teams",
     ],
+    image: "/images/projects/avid.jpg",
     accentColor: "#6366f1",
     featured: true,
   },
   {
-    slug: "cpa-membership-portal",
-    title: "CPA Membership Lifecycle Portal",
+    slug: "lacpa",
+    title: "LACPA",
     summary:
       "A portal managing the full membership lifecycle for a CPA organization — applications, renewals, dues, and credentials.",
     description:
@@ -32,12 +40,31 @@ export const projects: Project[] = [
       "Dues and payment lifecycle",
       "Member self-service portal",
     ],
+    image: "/images/projects/lacpa.jpg",
     accentColor: "#0ea5e9",
     featured: true,
   },
   {
-    slug: "bid-analysis-saas",
-    title: "SaaS Bid-Analysis for Construction",
+    slug: "ta-scan-agent",
+    title: "TA Scan Agent",
+    summary:
+      "Placeholder summary — full case study to come.",
+    description:
+      "Placeholder description — full case study to come.",
+    role: "Software Engineer",
+    stack: ["React", "Node.js", "Agentic AI"],
+    highlights: [
+      "Placeholder highlight",
+      "Placeholder highlight",
+      "Placeholder highlight",
+    ],
+    image: "/images/projects/ta-scan-agent.jpg",
+    accentColor: "#a855f7",
+    featured: true,
+  },
+  {
+    slug: "mag",
+    title: "MAG",
     summary:
       "A bid-analysis feature for a construction SaaS platform, helping companies evaluate and compare bids.",
     description:
@@ -49,39 +76,24 @@ export const projects: Project[] = [
       "Cost breakdown analysis",
       "Integrated into existing SaaS platform",
     ],
+    image: "/images/projects/mag.jpg",
     accentColor: "#f59e0b",
-    featured: true,
   },
   {
-    slug: "taxi-platform",
-    title: "Taxi Platform",
+    slug: "beastfit-wear",
+    title: "Beastfit Wear",
     summary:
-      "A ride-hailing platform covering dispatch, tracking, and trip management.",
+      "Placeholder summary — full case study to come.",
     description:
-      "Placeholder description — full case study to come. Dispatching, live tracking, and trip lifecycle management for a taxi service.",
+      "Placeholder description — full case study to come.",
     role: "Full-Stack Engineer",
-    stack: ["React", "Node.js", "Docker"],
+    stack: ["React", "Node.js"],
     highlights: [
-      "Dispatch and trip management",
-      "Live tracking",
-      "Driver and rider experiences",
+      "Placeholder highlight",
+      "Placeholder highlight",
+      "Placeholder highlight",
     ],
+    image: "/images/projects/beastfit-wear.jpg",
     accentColor: "#22c55e",
-  },
-  {
-    slug: "ai-desktop-companion",
-    title: "AI Desktop Companion Robot",
-    summary:
-      "A personal project: a desktop companion robot powered by an AI agent.",
-    description:
-      "Placeholder description — full case study to come. Hardware + software personal project exploring embodied AI: voice interaction, expressive behavior, and agentic capabilities on the desk.",
-    role: "Creator",
-    stack: ["Agentic AI", "Node.js", "Embedded"],
-    highlights: [
-      "Voice interaction",
-      "Expressive robot behaviors",
-      "Agentic AI integration",
-    ],
-    accentColor: "#ec4899",
   },
 ];

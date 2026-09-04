@@ -3,7 +3,7 @@ import { Hero3D } from "@/components/3d/Hero3D";
 import { ScrollManager } from "@/components/ScrollManager";
 import { HeroPinned } from "@/components/sections/HeroPinned";
 import { About } from "@/components/sections/About";
-import { Projects } from "@/components/sections/Projects";
+import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
 import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
@@ -15,7 +15,7 @@ export default function Home() {
       <main>
         <HeroPinned />
         <About />
-        <Projects />
+        <ProjectsGrid />
         <Contact />
       </main>
     </>

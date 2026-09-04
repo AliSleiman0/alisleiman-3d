@@ -16,12 +16,10 @@ import { site } from "@/data/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** Interim: Projects maps 1:1 to the taxi act until the other four project
- * acts exist and this section gets split into per-project sub-triggers. */
 const SECTION_TO_ACT: Record<string, ActName | undefined> = {
   hero: "none", // pinned-photo hero covers the canvas — park it empty
   about: "about",
-  projects: "taxi",
+  projects: "none", // 2D image grid, no 3D beat — park it empty too
 };
 
 const TRANSITION_DURATION = 0.45;

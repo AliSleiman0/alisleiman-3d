@@ -12,6 +12,12 @@ export interface Project {
   stack: string[];
   highlights: string[];
   links?: ProjectLink[];
+  /**
+   * Grid tile image for the Projects section, served from /public.
+   * Spelled out rather than derived from the slug so a wrong or missing
+   * filename is visible here instead of silently 404-ing at request time.
+   */
+  image: string;
   /** Hex color used for section accents / 3D theming per project. */
   accentColor?: string;
   featured?: boolean;

@@ -4,15 +4,13 @@ import { useSyncExternalStore } from "react";
 import { getActiveAct, subscribeActiveAct } from "@/lib/scroll";
 import type { QualityTier } from "./quality";
 import { AboutAct } from "./acts/AboutAct";
-import { AllwaytaxiAct } from "./acts/AllwaytaxiAct";
 
 /** Mounts exactly one act at a time, keyed to the active scroll section.
- * "none" while the pinned-photo hero covers the viewport (nothing to render).
- * Luminee/Lacpa/ConstructIQ/Avid/Contact acts aren't built yet. */
+ * "none" while the pinned-photo hero covers the viewport, and again over the
+ * Projects section — that section is a 2D image grid, not a 3D beat. */
 export function SceneManager({ quality }: { quality: QualityTier }) {
   const act = useSyncExternalStore(subscribeActiveAct, getActiveAct, getActiveAct);
 
-  if (act === "none") return null;
   if (act === "about") return <AboutAct quality={quality} />;
-  return <AllwaytaxiAct quality={quality} />;
+  return null;
 }
