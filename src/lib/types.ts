@@ -5,7 +5,16 @@ export interface ProjectLink {
 
 export interface Project {
   slug: string;
+  /** Plain-language name for what this IS — the bold line on the grid tile.
+   * Client-facing: a visitor who has never heard of the client should understand
+   * it. The client's own name lives in `client`, not here. */
   title: string;
+  /** Small uppercase line above the title on the tile, e.g. "Accounting ·
+   * Member portal". Sector first so the breadth reads at a glance. */
+  sector: string;
+  /** The real client / product name. Kept for case studies and credibility;
+   * not currently shown on the grid. */
+  client: string;
   summary: string;
   description: string;
   role: string;
@@ -40,6 +49,18 @@ export interface HeroContent {
   cta: { label: string; href: string };
 }
 
+/** Copy for the About section. Client-facing throughout — this section talks to
+ * someone deciding whether to hire, not to another engineer reading a résumé. */
+export interface AboutContent {
+  /** Section h2. */
+  title: string;
+  /** Body paragraphs, in order. */
+  paragraphs: string[];
+  /** Muted one-liner under the capability groups. Keeps a credibility signal
+   * for technical buyers without making the tag list read as a résumé. */
+  stackNote: string;
+}
+
 export interface SiteConfig {
   name: string;
   role: string;
@@ -48,6 +69,15 @@ export interface SiteConfig {
   location?: string;
   socials: ProjectLink[];
   nav: { label: string; href: string }[];
-  skills: { area: string; items: string[] }[];
+  /** What the client gets, named as the problem they came here to solve —
+   * NOT a capability or technology list. A tag cloud of technical nouns
+   * ("APIs", "CI/CD") reads as a résumé; nobody shops for an API. */
+  outcomes: { title: string; detail: string }[];
   hero: HeroContent;
+  about: AboutContent;
+  /** Subtitle under the Projects heading. */
+  projectsIntro: string;
+  /** Contact section copy. This is where the hero's "Start a project" CTA
+   * lands, so it must read as an invitation to hire, not to chat. */
+  contact: { title: string; description: string };
 }

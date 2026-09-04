@@ -4,7 +4,7 @@ export const site: SiteConfig = {
   name: "Ali Sleiman",
   role: "Software Engineer",
   tagline:
-    "Building full-stack products and agentic AI systems — from courtrooms to construction sites.",
+    "Software engineer building web apps, client portals and applied AI — one partner from first idea to launch.",
   email: "sleimana181@gmail.com",
   socials: [
     { label: "GitHub", url: "https://github.com/" },
@@ -32,10 +32,43 @@ export const site: SiteConfig = {
     ],
     cta: { label: "Start a project", href: "#contact" },
   },
-  skills: [
-    { area: "Frontend", items: ["React", "TypeScript", "Next.js", "Tailwind CSS"] },
-    { area: "Backend", items: ["Node.js", "Spring Boot", "REST APIs"] },
-    { area: "Infrastructure", items: ["Docker", "SQL Server", "CI/CD"] },
-    { area: "AI", items: ["Agentic AI tooling", "LLM integration", "Claude API"] },
+  about: {
+    title: "One partner, start to finish",
+    paragraphs: [
+      "I help companies turn an idea into software their customers actually use — the interface people touch, the systems behind it, and the infrastructure that keeps it running, handled by one person end to end.",
+      "Much of my recent work is applied AI: an agent that reads across research sources and answers the question directly, and document-heavy workflows where automation saves real hours.",
+      "You get visible progress every week and clear updates in plain language, from first idea through launch and beyond.",
+    ],
+    stackNote:
+      "Built with React, Next.js, Node.js, Spring Boot, SQL Server and Docker.",
+  },
+  contact: {
+    title: "Let's build something",
+    description:
+      "Tell me what you're trying to build and I'll come back with an honest view of scope, timeline and cost.",
+  },
+  projectsIntro:
+    "Work I've shipped across accounting, life sciences, education and retail — and one robot built on my own time.",
+  // Named as the problem the client arrived with, not as capability. The
+  // technology lives in one muted line (`about.stackNote`) and nowhere else.
+  outcomes: [
+    {
+      title: "Bring a product to market",
+      detail: "Idea to launched app, without you having to assemble a team first.",
+    },
+    {
+      title: "Replace manual work",
+      detail:
+        "Spreadsheets, copy-paste and email chains become software your team actually likes using.",
+    },
+    {
+      title: "Put AI on document busywork",
+      detail:
+        "Reading, extracting and summarising at volume — where it saves real hours, not as a demo.",
+    },
+    {
+      title: "Keep it running",
+      detail: "Hosting, monitoring and improvements long after launch day.",
+    },
   ],
 };

@@ -1,6 +1,5 @@
 import { site } from "@/data/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Tag } from "@/components/ui/Tag";
 import { Reveal } from "@/components/ui/Reveal";
 
 export function About() {
@@ -9,45 +8,36 @@ export function About() {
       <div className="section-shell">
         <div className="section-divider mb-24 sm:mb-32" />
         <Reveal>
-          <SectionHeading overline="01 · About" title="Engineer across the stack" />
+          <SectionHeading overline="01 · About" title={site.about.title} />
         </Reveal>
 
         <div className="grid gap-12 md:grid-cols-2 md:gap-16">
           <Reveal>
             <div className="space-y-5 text-base leading-7 text-muted">
-              <p>
-                I&apos;m {site.name}, a software engineer who builds products
-                end-to-end — from React frontends and Spring Boot or Node.js
-                backends to the Docker pipelines and SQL Server schemas that keep
-                them running.
-              </p>
-              <p>
-                Lately my focus has been agentic AI: shipping an AI-powered
-                pre-trial intelligence agent for legal teams and building a
-                desktop companion robot on my own time. I like problems where
-                the interesting part is the system, not just the screen.
-              </p>
-              <p>
-                This site is one of those problems — a scroll-driven 3D
-                portfolio built with React Three Fiber, GSAP, and Next.js.
-              </p>
+              {site.about.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
           </Reveal>
 
           <Reveal delay={0.15}>
             <div className="space-y-8">
-              {site.skills.map((group) => (
-                <div key={group.area}>
-                  <h3 className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-muted">
-                    {group.area}
+              {site.outcomes.map((outcome) => (
+                <div key={outcome.title}>
+                  <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+                    {outcome.title}
                   </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {group.items.map((skill) => (
-                      <Tag key={skill}>{skill}</Tag>
-                    ))}
-                  </div>
+                  <p className="mt-2 text-base leading-7 text-muted">
+                    {outcome.detail}
+                  </p>
                 </div>
               ))}
+
+              {/* The actual tech, demoted: credibility for technical buyers
+                  without the capability tags above reading as a résumé. */}
+              <p className="border-t border-border-soft pt-6 text-sm leading-6 text-muted">
+                {site.about.stackNote}
+              </p>
             </div>
           </Reveal>
         </div>

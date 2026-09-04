@@ -16,8 +16,8 @@ export function Contact() {
         <Reveal>
           <SectionHeading
             overline="03 · Contact"
-            title="Let's build something"
-            description="Open to interesting problems, collaborations, and good conversations about software."
+            title={site.contact.title}
+            description={site.contact.description}
           />
         </Reveal>
 
