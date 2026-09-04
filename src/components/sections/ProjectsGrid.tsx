@@ -32,8 +32,13 @@ gsap.registerPlugin(ScrollTrigger);
  * paths cross: the left column never enters column 2, the centre tile only
  * descends within column 2, the right column never enters column 2.
  *
- * Order is centre-out, not left-to-right — the anchor at index 2 seats first and
- * the flanks alternate around it, so the composition builds from its focal point.
+ * TWO PHASES, not one overlapping stagger. The anchor (index 2) flies in alone
+ * and lands FULLY — `at: 0`, done by 0.45 — before any flank starts moving at
+ * 0.48. So you read the hero image on its own, then watch the composition build
+ * around it. Keep that 0.45/0.48 boundary intact when retiming: overlapping the
+ * flanks back into the anchor's tween is exactly what this replaced.
+ * Within the flanks the order stays centre-out: left, right, bottom-left,
+ * bottom-right.
  *
  * TILE RATIOS ARE TUNED TO THE SOURCE IMAGES — re-tune if those change.
  * The four flanking images are 1402×1122 (1.25), so their slots sit in a
@@ -46,11 +51,11 @@ gsap.registerPlugin(ScrollTrigger);
  */
 const TILES = [
   // grid-area: row-start / col-start / row-end / col-end   → @1072: w×h (ratio)
-  { area: "1 / 1 / 20 / 2", inset: "", from: { x: "-60vw", y: "0vh" }, at: 0.08 }, // 349×239 (1.46)
-  { area: "21 / 1 / 37 / 2", inset: "ml-[26%]", from: { x: "-40vw", y: "25vh" }, at: 0.24 }, // 258×202 (1.28)
-  { area: "6 / 2 / 42 / 3", inset: "", from: { x: "0vw", y: "-70vh" }, at: 0 }, // 349×454 (0.77) anchor
-  { area: "10 / 3 / 29 / 4", inset: "", from: { x: "60vw", y: "0vh" }, at: 0.16 }, // 349×239 (1.46)
-  { area: "30 / 3 / 51 / 4", inset: "", from: { x: "40vw", y: "30vh" }, at: 0.32 }, // 349×265 (1.32)
+  { area: "1 / 1 / 20 / 2", inset: "", from: { x: "-60vw", y: "0vh" }, at: 0.48, dur: 0.42 }, // 349×239 (1.46)
+  { area: "21 / 1 / 37 / 2", inset: "ml-[26%]", from: { x: "-40vw", y: "25vh" }, at: 0.72, dur: 0.42 }, // 258×202 (1.28)
+  { area: "6 / 2 / 42 / 3", inset: "", from: { x: "0vw", y: "-70vh" }, at: 0, dur: 0.45 }, // 349×454 (0.77) ANCHOR — lands alone
+  { area: "10 / 3 / 29 / 4", inset: "", from: { x: "60vw", y: "0vh" }, at: 0.60, dur: 0.42 }, // 349×239 (1.46)
+  { area: "30 / 3 / 51 / 4", inset: "", from: { x: "40vw", y: "30vh" }, at: 0.84, dur: 0.42 }, // 349×265 (1.32)
 ] as const;
 
 /** Mobile fallback keeps the asymmetry as alternating insets. Aspects stay in
@@ -59,28 +64,30 @@ const TILES = [
  * Vectors are horizontal only here — vertical travel on a narrow viewport would
  * fling tiles past the fold. */
 const MOBILE_TILES = [
-  { inset: "mr-[15%]", aspect: "aspect-[4/3]", from: { x: "-70vw", y: "0vh" }, at: 0 },
-  { inset: "ml-[15%]", aspect: "aspect-[5/4]", from: { x: "70vw", y: "0vh" }, at: 0.1 },
-  { inset: "mr-[4%]", aspect: "aspect-[4/5]", from: { x: "-70vw", y: "0vh" }, at: 0.2 },
-  { inset: "ml-[15%]", aspect: "aspect-[4/3]", from: { x: "70vw", y: "0vh" }, at: 0.3 },
-  { inset: "mr-[15%]", aspect: "aspect-[5/4]", from: { x: "-70vw", y: "0vh" }, at: 0.4 },
+  { inset: "mr-[15%]", aspect: "aspect-[4/3]", from: { x: "-70vw", y: "0vh" }, at: 0, dur: 0.5 },
+  { inset: "ml-[15%]", aspect: "aspect-[5/4]", from: { x: "70vw", y: "0vh" }, at: 0.16, dur: 0.5 },
+  { inset: "mr-[4%]", aspect: "aspect-[4/5]", from: { x: "-70vw", y: "0vh" }, at: 0.32, dur: 0.5 },
+  { inset: "ml-[15%]", aspect: "aspect-[4/3]", from: { x: "70vw", y: "0vh" }, at: 0.48, dur: 0.5 },
+  { inset: "mr-[15%]", aspect: "aspect-[5/4]", from: { x: "-70vw", y: "0vh" }, at: 0.64, dur: 0.5 },
 ] as const;
 
-/** Builds the scrubbed assembly for one breakpoint's tile container. */
+/** Builds the scrubbed assembly for one breakpoint's tile container.
+ *
+ * `trigger`/`start`/`end` differ per breakpoint: desktop scrubs against its own
+ * sticky runway, mobile against the natural approach to the stack. */
 function buildAssembly(
   container: HTMLElement,
-  specs: readonly { from: { x: string; y: string }; at: number }[]
+  specs: readonly { from: { x: string; y: string }; at: number; dur: number }[],
+  scrollTrigger: ScrollTrigger.Vars
 ) {
   const tl = gsap.timeline({
-    defaults: { ease: "none" },
+    // power2.out per tile, not linear: each one decelerates into its slot, which
+    // is what reads as "smooth" rather than mechanical. Still fully scroll-driven
+    // — the ease shapes each tile's own sub-tween, not the scrub.
+    defaults: { ease: "power2.out" },
     scrollTrigger: {
-      // Triggered on the tile container, not the <section>: the section opens
-      // with the heading and a mb-24/32 divider, so a section-anchored trigger
-      // would be most of the way through before a tile is anywhere near view.
-      trigger: container,
-      start: "top 90%",
-      end: "top 35%",
-      scrub: 0.6,
+      scrub: 1.2,
+      ...scrollTrigger,
     },
   });
 
@@ -91,7 +98,7 @@ function buildAssembly(
     tl.fromTo(
       el,
       { x: spec.from.x, y: spec.from.y, opacity: 0, scale: 0.94 },
-      { x: 0, y: 0, opacity: 1, scale: 1, duration: 0.55 },
+      { x: 0, y: 0, opacity: 1, scale: 1, duration: spec.dur },
       spec.at
     );
   });
@@ -171,6 +178,7 @@ export function ProjectsGrid() {
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
+  const runwayRef = useRef<HTMLDivElement>(null);
   // SSR and the first client render report false; this flips post-hydration,
   // which is what `dependencies` + `revertOnUpdate` below are for.
   const reduced = useReducedMotionPref();
@@ -179,17 +187,48 @@ export function ProjectsGrid() {
     () => {
       // Low tier / reduced motion: no transform-heavy fly-in. Returning early
       // leaves the tiles exactly as rendered — at rest, in final position.
-      if (reduced || detectLowMotion()) return;
+      if (reduced || detectLowMotion()) {
+        // The 220svh runway just collapsed to natural height, so every trigger
+        // measured against the taller document — here and in ScrollManager — is
+        // now stale. Same reason HeroPinned refreshes on its own runway collapse.
+        if (reduced) ScrollTrigger.refresh();
+        return;
+      }
 
       // Both containers are always in the DOM (`hidden md:grid` / `md:hidden`),
       // so only animate whichever one is actually visible. matchMedia reverts
       // its own tweens when the breakpoint changes.
       const mm = gsap.matchMedia();
       mm.add("(min-width: 768px)", () => {
-        if (gridRef.current) buildAssembly(gridRef.current, TILES);
+        // Desktop scrubs against the grid's OWN runway: the stage is sticky for
+        // RUNWAY_VH of scroll, so the assembly has ~2 screens to play over
+        // instead of the few hundred pixels of natural approach. That is the
+        // only lever that makes it genuinely slow — start/end tuning inside the
+        // approach distance can only ever buy a fraction of a screen.
+        if (gridRef.current && runwayRef.current)
+          buildAssembly(gridRef.current, TILES, {
+            // Start off the GRID, end off the RUNWAY. Anchoring both ends to the
+            // runway left a dead stretch: the grid is centred in a viewport-tall
+            // sticky stage, so it becomes visible ~(viewport+grid)/2 px before
+            // the runway's top reaches the viewport top, and you scrolled past an
+            // empty block waiting for the trigger. That offset scales with
+            // viewport height, so no fixed start percentage fixes it — keying the
+            // start to the grid's own top does, at any size.
+            trigger: gridRef.current,
+            start: "top bottom",
+            endTrigger: runwayRef.current,
+            end: "bottom bottom",
+          });
       });
       mm.add("(max-width: 767.98px)", () => {
-        if (stackRef.current) buildAssembly(stackRef.current, MOBILE_TILES);
+        // Mobile has no runway: the stack is several screens tall on its own, so
+        // pinning it would trap the user. Scrub the natural approach instead.
+        if (stackRef.current)
+          buildAssembly(stackRef.current, MOBILE_TILES, {
+            trigger: stackRef.current,
+            start: "top bottom",
+            end: "top 20%",
+          });
       });
       // These triggers are created during hydration, while the 700svh hero
       // runway above is still settling — without a refresh they keep the
@@ -202,6 +241,7 @@ export function ProjectsGrid() {
     // the start state before paint anyway, and if GSAP never boots the images
     // still render. Class-hiding the section's entire content would risk it
     // staying permanently invisible.
+    // `reduced` is a dependency because the runway height depends on it.
     { scope: sectionRef, dependencies: [reduced], revertOnUpdate: true }
   );
 
@@ -220,22 +260,45 @@ export function ProjectsGrid() {
         {/* Tiles park off-screen before assembling; clip (not hidden, which
             would make this a scroll container) keeps that off the x-axis. */}
         <div className="[overflow-x:clip]">
-          {/* Desktop: the staircase composition. The wrapper's aspect ratio is
-              what makes the 1fr rows width-derived, so every tile keeps its
-              proportion at any container width. */}
+          {/* Desktop runway. The stage below is `position: sticky`, NOT
+              ScrollTrigger `pin` — same choice as HeroPinned, so no pin-spacer
+              is injected and the document doesn't reshuffle. The grid holds
+              still for RUNWAY_VH of scroll while the assembly plays over it.
+              Under reduced motion the runway collapses to natural height, or the
+              section would leave two blank screens behind the static grid. */}
           <div
-            ref={gridRef}
-            className="hidden aspect-[1072/630] grid-cols-3 gap-x-3 gap-y-0 [grid-template-rows:repeat(50,1fr)] md:grid"
+            ref={runwayRef}
+            // Runway length is set to preserve PER-TILE pacing, not total time.
+            // Splitting the anchor and the flanks into two phases stretched the
+            // timeline from 1.06 to 1.26 notional units, so the runway grew by
+            // the same ~19% (150svh → 175svh). Shortening it would speed every
+            // individual tile back up, which is the pacing already signed off.
+            className={cn("hidden md:block", !reduced && "md:h-[175svh]")}
           >
-            {TILES.map((tile, i) => (
-              <Tile
-                key={projects[i].slug}
-                index={i}
-                sizes="33vw"
-                style={{ gridArea: tile.area }}
-                className={tile.inset}
-              />
-            ))}
+            <div
+              className={cn(
+                !reduced &&
+                  "md:sticky md:top-0 md:flex md:h-svh md:items-center"
+              )}
+            >
+              {/* The staircase composition. The wrapper's aspect ratio is what
+                  makes the 1fr rows width-derived, so every tile keeps its
+                  proportion at any container width. */}
+              <div
+                ref={gridRef}
+                className="grid aspect-[1072/630] w-full grid-cols-3 gap-x-3 gap-y-0 [grid-template-rows:repeat(50,1fr)]"
+              >
+                {TILES.map((tile, i) => (
+                  <Tile
+                    key={projects[i].slug}
+                    index={i}
+                    sizes="33vw"
+                    style={{ gridArea: tile.area }}
+                    className={tile.inset}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Mobile: single column, asymmetry carried by alternating insets. */}
