@@ -71,6 +71,18 @@ const MOBILE_TILES = [
   { inset: "mr-[15%]", aspect: "aspect-[5/4]", from: { x: "-70vw", y: "0vh" }, at: 0.64, dur: 0.5 },
 ] as const;
 
+/**
+ * Slugs whose source image is already dark enough to sit on the page unaided —
+ * a photograph and a dark-UI mockup rather than a screenshot on white. They get
+ * no tint: darkening them further only muddies them. Everything else is a
+ * light-background screenshot and is tinted (see `Tile`).
+ *
+ * Keyed by slug, not index, so reordering `projects` can't silently move the
+ * treatment onto the wrong image. If a source image is replaced, re-check which
+ * side of this line it belongs on.
+ */
+const DARK_SOURCES = new Set(["desk-companion-robot", "fitness-storefront"]);
+
 /** Builds the scrubbed assembly for one breakpoint's tile container.
  *
  * `trigger`/`start`/`end` differ per breakpoint: desktop scrubs against its own
@@ -118,15 +130,18 @@ function Tile({
   sizes: string;
 }) {
   const project = projects[index];
+  const tinted = !DARK_SOURCES.has(project.slug);
 
   return (
     <div
       tabIndex={0}
       style={style}
       className={cn(
-        // `isolate` is load-bearing: the tint below uses `mix-blend-multiply`,
-        // which blends against the nearest stacking context. Without it the
-        // tint reaches past the tile into the page and the fixed 3D canvas.
+        // `isolate` is load-bearing wherever the tint renders: it uses
+        // `mix-blend-multiply`, which blends against the nearest stacking
+        // context. Without it the tint reaches past the tile into the page and
+        // the fixed 3D canvas. Kept on every tile so it can't be forgotten if
+        // a slug moves in or out of DARK_SOURCES.
         "group relative isolate overflow-hidden rounded-xl border border-border-soft bg-surface",
         "outline-none focus-visible:ring-2 focus-visible:ring-accent",
         className
@@ -146,26 +161,28 @@ function Tile({
         loading="eager"
         className={cn(
           "object-cover transition-[filter] duration-300",
-          "saturate-[.85] brightness-95",
-          "group-hover:saturate-100 group-hover:brightness-100",
-          "group-focus-visible:saturate-100 group-focus-visible:brightness-100"
+          tinted && "saturate-[.85] brightness-95",
+          tinted && "group-hover:saturate-100 group-hover:brightness-100",
+          tinted &&
+            "group-focus-visible:saturate-100 group-focus-visible:brightness-100"
         )}
       />
 
-      {/* Tint. Three of the five source images are screenshots on light
-          backgrounds, which read as bright panels floating on a #07070b page
-          rather than as part of it. A uniform darkening pass on all five keeps
-          the grid consistent — and can't drift when an image is swapped —
-          while hover/focus lifts the tile back to full colour. Stays put on
-          touch, where there is no hover to clear it. */}
-      <div
-        aria-hidden
-        className={cn(
-          "pointer-events-none absolute inset-0 bg-[#07070b]/60 mix-blend-multiply",
-          "transition-opacity duration-300",
-          "group-hover:opacity-0 group-focus-visible:opacity-0"
-        )}
-      />
+      {/* Tint — only on the light-background sources (see DARK_SOURCES).
+          Those are screenshots on white, which read as bright panels floating
+          on a #07070b page rather than as part of it; darkening settles them
+          in. Hover/focus lifts a tile back to full colour, and the tint stays
+          put on touch, where there is no hover to clear it. */}
+      {tinted && (
+        <div
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute inset-0 bg-[#07070b]/60 mix-blend-multiply",
+            "transition-opacity duration-300",
+            "group-hover:opacity-0 group-focus-visible:opacity-0"
+          )}
+        />
+      )}
 
       {/* Caption: hover/focus on pointer devices, always visible on touch —
           there is no hover state to reveal it there. */}
