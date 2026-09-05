@@ -81,6 +81,7 @@ public/hero/              Hero photo (photo.jpg) + rembg foreground cutout (cuto
   - **Desktop scrubs against its own runway**: a `md:h-[175svh]` block (`runwayRef`) holding a `position: sticky` stage — sticky, NOT ScrollTrigger `pin`, same reason as `HeroPinned` (no pin-spacer reshuffling the document). Runway length is set to preserve **per-tile** pacing, not total duration: the two-phase split stretched the timeline 1.06 → 1.26 notional units, so the runway grew ~19% to match (~534px of scroll per tile).
   - **Gotcha — the trigger straddles two elements.** `trigger` is the *grid*, `endTrigger` is the *runway*. Anchoring both to the runway leaves a dead lead-in: the grid is centred in a viewport-tall sticky stage, so it becomes visible `(viewport + grid)/2` px *before* the runway tops out and you scroll past an empty block. That offset scales with viewport height, so no fixed start percentage fixes it — key the start to the grid's own top.
   - **Gotcha — `ScrollTrigger.refresh()` is mandatory after building.** These triggers are created during hydration while the 700svh hero runway above is still settling; without it they keep the unmeasured `start:0/end:null` they were born with and silently never advance. The reduced-motion branch refreshes too, because the runway collapses and changes document height.
+  - **Every tile is tinted.** Three of the five source images are screenshots on light backgrounds; untreated they read as bright panels floating on the `#07070b` page. `Tile` darkens all five uniformly — a `bg-[#07070b]/60 mix-blend-multiply` overlay between the `<Image>` and the caption scrim, plus `saturate-[.85] brightness-95` on the image — and hover/focus clears both. Uniform rather than per-image so it can't drift when an image is swapped. **The wrapper's `isolate` is load-bearing**: `mix-blend-multiply` blends against the nearest stacking context, and without it the tint reaches past the tile into the page and the fixed canvas. Tailwind gates `group-hover:` behind `@media (hover: hover)`, so the tint correctly stays put on touch — where the caption is always visible anyway. 45% was too weak to settle the light images; 60% with the dark images still holding detail is the balance.
   - **Images are `loading="eager"`, never lazy.** `next/image` gates lazy loading on IntersectionObserver, which tests the tile's *transformed* position — and the assembly parks tiles up to 60vw off-screen, so they never register as in-view and don't start loading until they fly in, popping in mid-animation. Not `priority` either: that injects a preload competing with the hero photo's LCP.
   - Tiles are deliberately **not** pre-hidden with CSS classes (unlike `HeroPinned`): `useGSAP` runs on `useLayoutEffect` so `fromTo` sets the start state before paint anyway, and class-hiding would risk the section's entire content staying invisible if GSAP never boots.
   - Mobile is a separate single-column timeline via `gsap.matchMedia()`, single-phase and sequential top-to-bottom, with **no runway** — the stack is several screens tall, so pinning would trap the user.
@@ -88,21 +89,20 @@ public/hero/              Hero photo (photo.jpg) + rembg foreground cutout (cuto
 - `components/3d/CameraRig.tsx` — keyframed camera path over `scrollState.progress`, smoothstep segments, exp damping, pointer parallax on top. **`at` values are hand-tuned to measured section offsets** (full-page progress is normalized over total document height, and the 700svh hero dominates it — camera parks on the About pose until ~0.54 where the canvas first becomes visible; measured at 800×1180 with all three runways: about 0.544, intro 0.618, projects 0.851). The rig pans to a centred `[0,0,6]`→origin pose over About's tail and **holds it for the whole intro** so the sphere's move-to-centre reads as the sphere moving, not the camera. **Re-measure and re-tune whenever any section height changes** — the Projects runway alone moved About from 0.83 to 0.70, and the intro runway moved it again to 0.54. **Known limitation**: because the hero and intro runways are viewport-proportional while every other section is content-height, these fractions shift with viewport HEIGHT, not just section heights — driving the rig from per-section progress instead of document-normalised progress would fix that properly.
 - `components/3d/Effects.tsx` — Bloom-only `EffectComposer` (`multisampling={0}`, `luminanceThreshold` 0.5, `mipmapBlur`), mounted by `Scene.tsx` on the `high` tier only. Tuned for the intro sphere: only the >1-multiplied limb/streak/filament pixels bloom. No `Vignette` (Hero3D's CSS overlay already is one — doubling it crushed copy contrast). The background `ParticleField` (`#8b8cf5` at 0.7 opacity) composites just under the threshold; if it ever halos, dim its opacity rather than raising the threshold.
 - `components/ui/Navbar.tsx` + `components/ui/ScrollProgressBar.tsx` — the fixed top nav (scrollspy via `activeSection`) and its rAF-driven progress bar. **Unmounted** since the nav was removed; kept in case it comes back.
+- `components/ui/WhatsAppFab.tsx` — the floating WhatsApp button, mounted page-wide in `app/page.tsx` as a sibling of `<main>`. A plain `<a>` with no `"use client"` (hover styling only, so it ships no JS) and a net-new inline SVG — the repo has no icon primitive. Deliberately not built on `ui/Button`, whose `h-12 px-6` pill base would be almost entirely overridden. `z-40`: above everything mounted (nothing else exceeds `z-[5]`) but below the unmounted Navbar's `z-50`, so nothing collides if the nav returns. Reads `site.whatsapp` — **the `wa.me` URL must be digits only**, no `+`, spaces or dashes, or the link silently fails.
 
-## Current status (2026-09-05) & next-session handoff
+## Current status (2026-09-06) & next-session handoff
 
-Stages 1–9 ✅. This session replaced the Projects section wholesale and gave the
-lower page a client-facing copy pass. Commits, in order:
+Stages 1–11 ✅. This session checkpointed the stage 10–11 work that was sitting
+uncommitted, then closed most of the content queue. Commits, in order:
 
-- `5a75171` — 2D masonry grid replaces the ProjectCard list; `AllwaytaxiAct`,
-  `Projects.tsx` and `ProjectCard.tsx` deleted; `ActName` narrowed to
-  `"none" | "about"`; `projects.ts` rewritten to the real five.
-- `eabcd0b` — scroll-scrubbed tile assembly; `lib/motionTier.ts` extracted so the
-  reduced-motion/coarse-pointer/few-cores heuristic isn't copied a third time.
-- `866a0ea` — client-facing copy for About/Projects/Contact, real project images,
-  descriptive slugs, portrait centre anchor.
-- `14afbce` — assembly slowed onto its own 175svh sticky runway, dead lead-in
-  removed, anchor split into its own phase.
+- `34eca8a` — stage 10–11 checkpoint: `IntroAct` + `introShaders` (the nebula
+  sphere), `Effects.tsx` bloom mounted on `high`, Lenis `SmoothScroll`, the top
+  nav removed, `AboutAct` deleted, `CameraRig` re-measured. This was all found
+  uncommitted in the working tree at session start.
+- `bbe5eb7` — uniform dark tint on all five project tiles, real GitHub/LinkedIn
+  URLs, WhatsApp (floating button + Contact row), and the four placeholder
+  case-study `description`s rewritten.
 
 **The Projects grid is the thing to understand before touching this page** — its
 architecture-map entry above lists five separate gotchas that each cost real
@@ -110,34 +110,41 @@ debugging time (the trigger straddling two elements, the mandatory
 `ScrollTrigger.refresh()`, eager images, the ratio↔source coupling, the two-phase
 boundary). Read them before retiming or restyling it.
 
+Closed since: the hero photo is real (Ali confirmed — the old "stock stand-in"
+note was wrong); the project-image tint is decided and shipped (uniform, all
+five — see the ProjectsGrid entry); GitHub/LinkedIn URLs are real; WhatsApp is
+added; the four placeholder case-study `description`s are rewritten.
+
 **Next session, in rough priority order:**
 
-1. **Real hero photo** — `public/hero/photo.jpg` is still a stock stand-in (not
-   Ali). Regenerate `photo.jpg` + `cutout.webp` (rembg, Python 3.13 venv — 3.14
-   lacks onnxruntime wheels; use the Python API `remove()`, the CLI extra isn't
-   installed) at 1920w, then re-check: (a) the occluded line still crosses the
-   subject at `p≈0` on desktop AND mobile (tune `.hero-line-behind`'s
-   `pl-[36vw]`/`top`), (b) `object-[68%_22%]` still frames the subject with hair
-   clear of the navbar on short viewports, (c) the scrim still carries text
-   legibility. Full-bleed `object-fit: cover`, so real "zoom out" needs a
-   wider-framed source.
-2. **Three of five project images have light backgrounds** (`member-portal`,
-   `research-agent`, `academic-advisor`) against a `#07070b` page, while
-   `desk-companion-robot` and `fitness-storefront` are dark. They read as bright
-   panels rather than part of the page. Either regenerate those three on dark
-   grounds, or add a treatment (tint/overlay) — flagged to Ali, not yet decided.
-3. **Real case-study copy** — `research-agent` and `fitness-storefront`
-   `description`/`highlights` are still placeholder; the others are thin. Titles,
-   sectors and summaries are done and client-facing.
-4. **Real GitHub/LinkedIn URLs** in `data/site.ts` (still `https://github.com/`).
-5. **Vercel deploy** — CLI not installed (`npm i -g vercel`).
-6. **Intro sphere visual sign-off** — stage 2b (palette, filaments, dust halo,
+1. **Finish the visual pass** — the checks below could not be completed this
+   session because the Chrome window was never actually on screen. See "Driving
+   the page over CDP lies to you" — with the window hidden, `document.hidden`
+   stays `true` and **rAF does not fire at all** (measured: 0 ticks in 500 ms),
+   so GSAP and R3F never run and Lenis eventually freezes scroll writes
+   entirely. Screenshots still force a paint, so static CSS *can* be checked
+   that way; anything scroll- or animation-driven cannot. Outstanding: the
+   intro-sphere sign-off (item 2), a live hover-restore on a tile (the CSS
+   rules were verified in the compiled stylesheet instead), and the WhatsApp
+   FAB at mobile widths — confirm it doesn't cover the Contact buttons when
+   they wrap.
+2. **Intro sphere visual sign-off** — stage 2b (palette, filaments, dust halo,
    idle flow, bloom on `high`) is built and lint/tsc/build/shader-compile clean
    but has NOT been eyeballed in a foregrounded browser (automation tabs stayed
    hidden, so no frames rendered). Check the checklist in the session recap:
    colours, seed not clipping white, filaments only after ~p 0.45, no bloom
    halo on the background stars, About/Projects copy contrast, frame time at
    DPR 2 (levers: `dpr [1,1.5]` on high, then `FIL_STEPS` 4).
+3. **Vercel deploy** — CLI is now installed (`vercel --version` → 59.11.7) but
+   **not authenticated**: `vercel whoami` returns "The specified token is not
+   valid." `vercel login` is interactive and cannot be driven from here — Ali
+   runs it, then `vercel link` (accept the `alisleiman-3d` default) and
+   `vercel --prod`. There is no git remote and no `vercel.json`/`vercel.ts`, so
+   this is a CLI direct-upload deploy, not a Git integration. No env vars, no
+   backend. `.gitignore` already covers `.vercel` and the 64 MB root `dev.log`.
+4. **A git remote** — the repo has none (`git remote -v` is empty), so there is
+   no off-machine copy of any of this. Worth doing before or alongside the
+   deploy; it also unlocks Git-triggered Vercel deploys.
 
 **Loose ends left deliberately:**
 
@@ -162,6 +169,22 @@ boundary). Read them before retiming or restyling it.
   events, or foreground the tab before trusting a reading. Also set
   `document.documentElement.style.scrollBehavior = 'auto'` first, since
   `globals.css` sets `scroll-behavior: smooth` and scripted scrolls land late.
+  **Worse than throttled — with the Chrome *window* not actually visible on
+  screen (minimised or fully covered), `document.hidden` stays `true` and rAF
+  fires ZERO times.** Measure it (`requestAnimationFrame` ticks over 500 ms)
+  before trusting anything animated; activating the tab is not enough, the
+  window must be on screen. Consequences, all hit in one session: nothing
+  animates or renders in the canvas; `await new Promise(r =>
+  requestAnimationFrame(r))` never resolves and **hangs the CDP eval until it
+  times out**; and Lenis — stepped from `gsap.ticker` — stops integrating, so
+  `scrollTop` writes first get reverted and later stop taking effect entirely.
+  What still works: screenshots force a paint, so **static CSS can be verified
+  by parking elements manually** (set `transform: none; opacity: 1` on the
+  tiles and screenshot). Beware that an HMR reload re-runs `useGSAP`'s
+  `fromTo`, which re-parks the tiles *after* your inline write — a tile
+  vanishing mid-check is usually that, not a bug. And `document.styleSheets`
+  came back inaccessible; `fetch`ing the stylesheet href and grepping the text
+  is the reliable way to confirm a Tailwind variant was generated.
 - **Measure layout, not transforms.** Use `offsetWidth/offsetHeight/offsetTop` for
   geometry checks — `getBoundingClientRect()` includes the assembly's transforms
   and will report nonsense mid-animation.
