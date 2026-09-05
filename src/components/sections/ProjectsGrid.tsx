@@ -124,7 +124,10 @@ function Tile({
       tabIndex={0}
       style={style}
       className={cn(
-        "group relative overflow-hidden rounded-xl border border-border-soft bg-surface",
+        // `isolate` is load-bearing: the tint below uses `mix-blend-multiply`,
+        // which blends against the nearest stacking context. Without it the
+        // tint reaches past the tile into the page and the fixed 3D canvas.
+        "group relative isolate overflow-hidden rounded-xl border border-border-soft bg-surface",
         "outline-none focus-visible:ring-2 focus-visible:ring-accent",
         className
       )}
@@ -141,7 +144,27 @@ function Tile({
         // Deliberately not `priority` either: that injects a preload that would
         // compete with the hero photo's LCP.
         loading="eager"
-        className="object-cover"
+        className={cn(
+          "object-cover transition-[filter] duration-300",
+          "saturate-[.85] brightness-95",
+          "group-hover:saturate-100 group-hover:brightness-100",
+          "group-focus-visible:saturate-100 group-focus-visible:brightness-100"
+        )}
+      />
+
+      {/* Tint. Three of the five source images are screenshots on light
+          backgrounds, which read as bright panels floating on a #07070b page
+          rather than as part of it. A uniform darkening pass on all five keeps
+          the grid consistent — and can't drift when an image is swapped —
+          while hover/focus lifts the tile back to full colour. Stays put on
+          touch, where there is no hover to clear it. */}
+      <div
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-0 bg-[#07070b]/60 mix-blend-multiply",
+          "transition-opacity duration-300",
+          "group-hover:opacity-0 group-focus-visible:opacity-0"
+        )}
       />
 
       {/* Caption: hover/focus on pointer devices, always visible on touch —

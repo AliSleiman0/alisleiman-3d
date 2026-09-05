@@ -6,6 +6,7 @@ import { About } from "@/components/sections/About";
 import { Intro } from "@/components/sections/Intro";
 import { ProjectsGrid } from "@/components/sections/ProjectsGrid";
 import { Contact } from "@/components/sections/Contact";
+import { WhatsAppFab } from "@/components/ui/WhatsAppFab";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <ProjectsGrid />
         <Contact />
       </main>
+      <WhatsAppFab />
     </>
   );
 }

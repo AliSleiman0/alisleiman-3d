@@ -7,9 +7,13 @@ export const site: SiteConfig = {
     "Software engineer building web apps, client portals and applied AI — one partner from first idea to launch.",
   email: "sleimana181@gmail.com",
   socials: [
-    { label: "GitHub", url: "https://github.com/" },
-    { label: "LinkedIn", url: "https://linkedin.com/" },
+    { label: "GitHub", url: "https://github.com/AliSleiman0" },
+    { label: "LinkedIn", url: "https://linkedin.com/in/AliSleiman11" },
   ],
+  whatsapp: {
+    display: "+961 78 991 778",
+    url: "https://wa.me/96178991778",
+  },
   nav: [
     { label: "Home", href: "#hero" },
     { label: "About", href: "#about" },

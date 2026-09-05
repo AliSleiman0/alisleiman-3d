@@ -77,6 +77,11 @@ export interface SiteConfig {
   email: string;
   location?: string;
   socials: ProjectLink[];
+  /** WhatsApp contact — the floating button and the Contact row both read this.
+   * Kept out of `socials` because it needs a human-formatted number alongside
+   * the link. `url` must be a wa.me deep link with digits only: no `+`, no
+   * spaces, no dashes — wa.me silently fails on anything else. */
+  whatsapp: { display: string; url: string };
   nav: { label: string; href: string }[];
   /** What the client gets, named as the problem they came here to solve —
    * NOT a capability or technology list. A tag cloud of technical nouns

@@ -11,8 +11,10 @@ import type { Project } from "@/lib/types";
  * visitor who has never heard of LACPA should still understand the tile. The
  * client name is kept in `client` for case studies and credibility.
  *
- * `description` / `highlights` are still thin; real case-study copy is a
- * pending content task.
+ * `description` is the long-form case-study paragraph. It is not rendered on
+ * the grid today — the tile caption shows `sector` + `title` only — so it
+ * exists for the case-study pages that don't exist yet. Keep it client-facing
+ * and claim nothing that can't be backed up: no metrics, no dates.
  */
 export const projects: Project[] = [
   {
@@ -43,7 +45,7 @@ export const projects: Project[] = [
     summary:
       "An AI agent that reads across sources and answers the question directly, instead of handing back a list of documents to sift through.",
     description:
-      "Placeholder description — full case study to come. Agentic retrieval and synthesis across a document corpus, with answers traced back to their sources.",
+      "Ask a question in plain language and get an answer back, not a reading list. The agent works across the whole document corpus rather than one file at a time, pulls the relevant passages together, and attaches the sources behind every claim so the answer can be checked instead of trusted. It replaces the hours spent opening documents one by one just to find out whether they matter.",
     role: "Software Engineer",
     stack: ["React", "Node.js", "Agentic AI"],
     highlights: [
@@ -64,7 +66,7 @@ export const projects: Project[] = [
     summary:
       "A desktop robot with a voice interface and an expressive face — hardware and software built together, so the AI is something you look at and talk to rather than a chat window.",
     description:
-      "Placeholder description — full case study to come. Embodied AI on the desk: voice interaction, expressive behaviour and agentic capability, across the electronics, firmware and software.",
+      "An AI you look at and talk to rather than type at. Built end to end — electronics, firmware and software — so the voice, the face and the behaviour behind them are one system rather than three bolted together: it listens, answers out loud, and shows what it is doing while it works.",
     role: "Creator",
     stack: ["Agentic AI", "Node.js", "Embedded"],
     highlights: [
@@ -84,7 +86,7 @@ export const projects: Project[] = [
     summary:
       "Academic advising and course planning — students see what to take and when, and advisors see who is drifting off track before it becomes a problem.",
     description:
-      "Placeholder description — full case study to come. Degree planning against real requirements and prerequisites, schedule building, and progress tracking that surfaces at-risk students to advisors.",
+      "Degree planning that understands the rules. Students build a schedule against the real requirements and prerequisites and can see what to take and when, instead of reconstructing it from a PDF catalogue every semester. Advisors get the same picture across everyone they look after, with students drifting off track surfaced while there is still time to act.",
     role: "Software Engineer",
     stack: ["React", "Node.js", "SQL Server"],
     highlights: [
@@ -103,7 +105,7 @@ export const projects: Project[] = [
     summary:
       "An online store for a fitness apparel brand — browsing, product pages and checkout built to get people from looking to buying.",
     description:
-      "Placeholder description — full case study to come. Storefront, catalogue and checkout for a direct-to-consumer apparel brand.",
+      "A direct-to-consumer store for a fitness apparel brand: a catalogue people can actually browse, product pages written and built to sell, and a checkout that keeps them moving instead of losing them a step before the end. The brand runs its own storefront on its own terms rather than renting shelf space in someone else's marketplace.",
     role: "Full-Stack Engineer",
     stack: ["React", "Node.js"],
     highlights: [

@@ -24,6 +24,9 @@ export function Contact() {
         <Reveal delay={0.1}>
           <div className="flex flex-wrap items-center gap-4">
             <Button href={`mailto:${site.email}`}>{site.email}</Button>
+            <Button href={site.whatsapp.url} variant="ghost" external>
+              WhatsApp
+            </Button>
             {site.socials.map((social) => (
               <Button key={social.label} href={social.url} variant="ghost" external>
                 {social.label}
