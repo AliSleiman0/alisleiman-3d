@@ -135,10 +135,9 @@ added; the four placeholder case-study `description`s are rewritten.
    colours, seed not clipping white, filaments only after ~p 0.45, no bloom
    halo on the background stars, About/Projects copy contrast, frame time at
    DPR 2 (levers: `dpr [1,1.5]` on high, then `FIL_STEPS` 4).
-3. **A git remote** — the repo has none (`git remote -v` is empty), so there is
-   no off-machine copy of any of this. It would also let Vercel build from Git
-   instead of CLI upload, which is the bigger win: every commit would deploy,
-   and preview URLs would come for free.
+3. **Connect Vercel to the GitHub repo** (`vercel git connect`) so every push
+   deploys and branches get preview URLs. The remote now exists; the two are
+   just not wired together, so deploys are still manual CLI uploads.
 
 ## Deployment
 
@@ -146,9 +145,14 @@ added; the four placeholder case-study `description`s are rewritten.
 `alisleiman0s-projects/alisleiman-3d`, account `alisleiman0`). Publicly
 reachable — no Deployment Protection in the way.
 
-There is no git remote, so this is a **CLI direct-upload deploy**, not a Git
-integration: `vercel --prod --yes` from the repo root. `vercel login` is
-interactive and can't be driven by an agent — a human runs it.
+**Source: https://github.com/AliSleiman0/alisleiman-3d** (public, `origin`,
+branch `main`).
+
+Deploys are currently **CLI direct upload**, not a Git integration:
+`vercel --prod --yes` from the repo root. Pushing to GitHub does *not* deploy —
+run `vercel git connect` if you want that (every push builds, plus preview URLs
+per branch). `vercel login` is interactive and can't be driven by an agent — a
+human runs it.
 
 Two gotchas, both hit on the first attempt:
 
