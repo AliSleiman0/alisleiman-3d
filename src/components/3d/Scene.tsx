@@ -5,11 +5,15 @@ import { CameraRig } from "./CameraRig";
 import { Lights } from "./Lights";
 import { SceneManager } from "./SceneManager";
 import { ParticleField } from "./ParticleField";
+import { Effects } from "./Effects";
 import type { QualityTier } from "./quality";
 
 export function Scene({ quality }: { quality: QualityTier }) {
   return (
     <>
+      {/* Opaque canvas (HeroCanvas alpha:false) — same colour as the page's
+          --background, so bloom composites over a defined ground. */}
+      <color attach="background" args={["#07070b"]} />
       <CameraRig />
       <Lights />
       <SceneManager quality={quality} />
@@ -38,8 +42,7 @@ export function Scene({ quality }: { quality: QualityTier }) {
               color="#e0e7ff"
             />
           </Environment>
-          {/* <Effects /> is off while the ASCII renderer owns the high tier:
-              both take over the render loop and cannot coexist. */}
+          <Effects />
         </>
       )}
     </>

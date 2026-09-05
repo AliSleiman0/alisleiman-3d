@@ -61,6 +61,15 @@ export interface AboutContent {
   stackNote: string;
 }
 
+/** Copy for the intro beat (the particle sphere between About and Projects). */
+export interface IntroContent {
+  /** Shown while the sphere is still gathering; fades out before `formed`
+   * appears — the two never coexist. A few words each, read in a glance. */
+  gathering: string;
+  /** Shown once the sphere is whole (IntroAct's GROW_END). */
+  formed: string;
+}
+
 export interface SiteConfig {
   name: string;
   role: string;
@@ -75,6 +84,7 @@ export interface SiteConfig {
   outcomes: { title: string; detail: string }[];
   hero: HeroContent;
   about: AboutContent;
+  intro: IntroContent;
   /** Subtitle under the Projects heading. */
   projectsIntro: string;
   /** Contact section copy. This is where the hero's "Start a project" CTA

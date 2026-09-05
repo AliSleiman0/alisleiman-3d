@@ -3,14 +3,15 @@
 import { useSyncExternalStore } from "react";
 import { getActiveAct, subscribeActiveAct } from "@/lib/scroll";
 import type { QualityTier } from "./quality";
-import { AboutAct } from "./acts/AboutAct";
+import { IntroAct } from "./acts/IntroAct";
 
 /** Mounts exactly one act at a time, keyed to the active scroll section.
- * "none" while the pinned-photo hero covers the viewport, and again over the
- * Projects section — that section is a 2D image grid, not a 3D beat. */
+ * "none" over the pinned-photo hero, About (copy over the particle
+ * background) and the 2D Projects grid. "intro" is the scroll-scrubbed
+ * particle sphere between About and Projects — the only 3D beat. */
 export function SceneManager({ quality }: { quality: QualityTier }) {
   const act = useSyncExternalStore(subscribeActiveAct, getActiveAct, getActiveAct);
 
-  if (act === "about") return <AboutAct quality={quality} />;
+  if (act === "intro") return <IntroAct quality={quality} />;
   return null;
 }

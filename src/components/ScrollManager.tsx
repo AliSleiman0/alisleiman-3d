@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import {
   scrollState,
+  introState,
   setActiveSection,
   setActiveAct,
   getActiveAct,
@@ -19,8 +20,16 @@ gsap.registerPlugin(ScrollTrigger);
 
 const SECTION_TO_ACT: Record<string, ActName | undefined> = {
   hero: "none", // pinned-photo hero covers the canvas — park it empty
-  about: "about",
+  about: "none", // copy over the particle background — no 3D beat
+  intro: "intro", // not in the nav — a pure motion beat between About and Projects
   projects: "none", // 2D image grid, no 3D beat — park it empty too
+};
+
+/** Sections whose own 0→1 progress is scrubbed into a lib/scroll field for
+ * the act mounted over them. Same trigger as the section window, so the
+ * bounds can never drift apart. */
+const SECTION_PROGRESS: Record<string, { progress: number } | undefined> = {
+  intro: introState,
 };
 
 const TRANSITION_DURATION = 0.45;
@@ -125,18 +134,34 @@ export function ScrollManager() {
       });
     }
 
-    for (const item of site.nav) {
-      const id = item.href.replace("#", "");
+    // Section windows are contiguous and non-overlapping (hero → about →
+    // intro → projects → contact). That matters: onToggle only acts on
+    // activation, so an overlap would strand activeAct when scrolling back up.
+    const navIds = site.nav.map((item) => item.href.replace("#", ""));
+    const sectionIds = Array.from(
+      new Set([...navIds, ...Object.keys(SECTION_TO_ACT)])
+    );
+
+    for (const id of sectionIds) {
+      const sink = SECTION_PROGRESS[id];
       ScrollTrigger.create({
         trigger: `#${id}`,
         start: "top center",
         end: "bottom center",
         onToggle: (self) => {
           if (!self.isActive) return;
-          setActiveSection(id);
+          // Only nav sections drive the navbar: a non-nav beat keeps the last
+          // content section highlighted (scrollspy semantics).
+          if (navIds.includes(id)) setActiveSection(id);
           const act = SECTION_TO_ACT[id];
           if (act) transitionTo(act);
         },
+        onUpdate:
+          sink && !reduceMotion
+            ? (self) => {
+                sink.progress = self.progress;
+              }
+            : undefined,
       });
     }
   });

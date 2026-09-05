@@ -13,26 +13,32 @@ interface Keyframe {
 
 /** Camera path through the page. `at` = full-page scroll progress.
  *
- * Measured live at 1178×1110, with BOTH runways in place (hero 700svh, Projects
- * 175svh): hero 0→0.701, about 0.701→0.801, projects 0.801→1.029, contact past
- * the end. The hero's photo covers the canvas for its whole runway, so the
- * camera parks on the About pose until ~0.70 and only travels once the canvas
- * is actually visible. Projects owns a fifth of total progress now that it has
- * its own scroll runway — re-measure whenever either runway length changes.
+ * Estimated at 1178×1110 with all THREE runways in place (hero 700svh, intro
+ * 300svh, Projects 175svh): hero 0→0.54, about 0.54→0.62, intro 0.62→0.85,
+ * projects 0.85→1.0, contact past the end. The hero's photo covers the canvas
+ * for its whole runway, so the camera parks on the About pose until the canvas
+ * is actually visible. The pan to the intro pose completes over About's tail,
+ * BEFORE the intro starts: in the About pose (looking at x=-2) the sphere's
+ * seed start position is off-screen, and the camera must hold still during the
+ * sphere so its "move to centre" reads as the sphere moving, not the rig.
+ * Re-measure whenever any runway length changes.
  *
  * CAVEAT: these fractions move with viewport HEIGHT, not just section heights.
- * The hero runway is viewport-proportional (700svh) while every other section
- * is content-height, so a shorter window gives the hero a smaller share of
- * total progress. The values below suit a typical desktop window; treat them
- * as approximate. Making this viewport-independent means driving the rig from
- * per-section progress rather than document-normalised progress — see AGENTS.md.
+ * The hero and intro runways are viewport-proportional while every other
+ * section is content-height, so a shorter window shifts every fraction. The
+ * values below suit a typical desktop window; treat them as approximate.
+ * Making this viewport-independent means driving the rig from per-section
+ * progress rather than document-normalised progress — see AGENTS.md.
  * Re-measure with section offsetTop ÷ (scrollHeight − innerHeight). */
 const KEYFRAMES: Keyframe[] = [
   { at: 0.0, position: [1.2, 0.6, 5], target: [-2.0, 0.2, 0] }, // parked (hero covers canvas)
-  { at: 0.70, position: [1.2, 0.6, 5], target: [-2.0, 0.2, 0] }, // about — canvas revealed
+  { at: 0.54, position: [1.2, 0.6, 5], target: [-2.0, 0.2, 0] }, // about — canvas revealed
+  { at: 0.58, position: [1.2, 0.6, 5], target: [-2.0, 0.2, 0] }, // hold through most of About
+  { at: 0.62, position: [0, 0, 6], target: [0, 0, 0] }, // intro pose reached as the intro starts
+  { at: 0.85, position: [0, 0, 6], target: [0, 0, 0] }, // held for the whole sphere
   // Projects is a 2D image grid with no act behind it (SceneManager renders
   // null there), so this keyframe only steers the particle background.
-  { at: 0.80, position: [2.4, 1.1, 7], target: [0, 0.2, 0] }, // projects
+  { at: 0.90, position: [2.4, 1.1, 7], target: [0, 0.2, 0] }, // projects
   { at: 1.0, position: [0, -0.6, 4.2], target: [0, 0.4, 0] }, // contact
 ];
 

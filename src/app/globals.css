@@ -23,7 +23,20 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+}
+
+/* Lenis (components/SmoothScroll.tsx) adds these classes while it runs. CSS
+   smooth scrolling would double-ease every programmatic scroll on top of the
+   damping, so it yields to Lenis; the height reset is Lenis's own recipe. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {

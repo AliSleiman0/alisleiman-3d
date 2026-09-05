@@ -42,6 +42,13 @@ export const site: SiteConfig = {
     stackNote:
       "Built with React, Next.js, Node.js, Spring Boot, SQL Server and Docker.",
   },
+  // Rides the sphere's own story — say what working together feels like,
+  // never what the 3D is. `gathering` shows while the seed is still pulling
+  // together; `formed` replaces it once the sphere is whole.
+  intro: {
+    gathering: "Rough idea in.",
+    formed: "Working product out.",
+  },
   contact: {
     title: "Let's build something",
     description:
