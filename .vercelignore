@@ -1,0 +1,9 @@
+# Vercel does not reliably fall back to .gitignore for the upload, so anything
+# large and local must be listed here too. `dev.log` is a stray `next dev` log
+# that had grown to ~65 MB and was the entire deploy payload until it was
+# excluded — it alone made the first `vercel --prod` fail on upload.
+dev.log
+*.log
+.next
+node_modules
+.env*

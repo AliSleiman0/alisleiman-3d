@@ -135,16 +135,35 @@ added; the four placeholder case-study `description`s are rewritten.
    colours, seed not clipping white, filaments only after ~p 0.45, no bloom
    halo on the background stars, About/Projects copy contrast, frame time at
    DPR 2 (levers: `dpr [1,1.5]` on high, then `FIL_STEPS` 4).
-3. **Vercel deploy** — CLI is now installed (`vercel --version` → 59.11.7) but
-   **not authenticated**: `vercel whoami` returns "The specified token is not
-   valid." `vercel login` is interactive and cannot be driven from here — Ali
-   runs it, then `vercel link` (accept the `alisleiman-3d` default) and
-   `vercel --prod`. There is no git remote and no `vercel.json`/`vercel.ts`, so
-   this is a CLI direct-upload deploy, not a Git integration. No env vars, no
-   backend. `.gitignore` already covers `.vercel` and the 64 MB root `dev.log`.
-4. **A git remote** — the repo has none (`git remote -v` is empty), so there is
-   no off-machine copy of any of this. Worth doing before or alongside the
-   deploy; it also unlocks Git-triggered Vercel deploys.
+3. **A git remote** — the repo has none (`git remote -v` is empty), so there is
+   no off-machine copy of any of this. It would also let Vercel build from Git
+   instead of CLI upload, which is the bigger win: every commit would deploy,
+   and preview URLs would come for free.
+
+## Deployment
+
+**Live: https://alisleiman-3d.vercel.app** (project
+`alisleiman0s-projects/alisleiman-3d`, account `alisleiman0`). Publicly
+reachable — no Deployment Protection in the way.
+
+There is no git remote, so this is a **CLI direct-upload deploy**, not a Git
+integration: `vercel --prod --yes` from the repo root. `vercel login` is
+interactive and can't be driven by an agent — a human runs it.
+
+Two gotchas, both hit on the first attempt:
+
+- **`vercel link` fails on the default project name.** It derives the name from
+  the directory `AliSleiman-3d`, and Vercel names must be lowercase — the same
+  capital letters that stopped `create-next-app` scaffolding in place. Pass it
+  explicitly: `vercel link --yes --project alisleiman-3d`.
+- **`.vercelignore` is mandatory here.** Vercel did *not* fall back to
+  `.gitignore` for the upload, so a stray ~65 MB `dev.log` at the repo root was
+  the entire 63.6 MB deploy payload and the upload failed. With `.vercelignore`
+  the payload is ~1 MB. Keep `next dev` logs out of the repo root, or at least
+  matched by `*.log` there.
+
+The upload also failed once with a bare `fetch failed` at ~75 % on a 1 MB
+payload and succeeded on an immediate retry — transient, just retry.
 
 **Loose ends left deliberately:**
 
